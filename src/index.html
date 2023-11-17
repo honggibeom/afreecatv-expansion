@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>extension</title>
+    <script src="https://static.afreecatv.com/asset/app/extension-helper/afreecatv-extension-sdk.js"></script>
+    <script src="index.js"></script>
+    <link href="index.css" rel="stylesheet"></link>
+  </head>
+  <body>
+    <p>오늘의 아가리 파이터</p>
+    <div id="main"></div>
+    <p id="send" class="send">전송</p>
+  </body>
+</html>
+
+<script>
+let btn =  document.getElementsByClassName("send").item(0);
+console.log(btn);
+btn.addEventListener("click", () => {
+  console.log(1);
+  extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
+});
+</script>
