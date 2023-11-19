@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>extension</title>
     <script src="https://static.afreecatv.com/asset/app/extension-helper/afreecatv-extension-sdk.js"></script>
-    <!-- <script src="index.js"></script> -->
+    <script src="index.js"></script>
     <script src="calendar.js"></script>
     <link href="index.css" rel="stylesheet"></link>
   </head>
   <body>
 
     <div id="header">
-      <p id="share">시청자와</br><span>공유</span></p>
-      <p class="heaerTitle">afreecatv calendar</p>
-      <p id="autoShare">자동 공유 <br/><span class="">off</span></p>
+      <p id="autoShare"></p>
+      <p class="heaerTitle">afreecatv calendar</p>      
+      <p id="share">시청자와</br><span style="margin-top:2px;">공유</span></p>
     </div>
-    <p style="height: 12px;"></p>
+    <p></p>
+    <div class="wrap">
     <div id="calendar"></div>
     <div id="detail">
+      <p class="subTitle">선택된 날짜</p>
+      <p id="selectedDate"></p>
       <p class="subTitle">방송 유형</p>
       <input type="text" id="categoryInput" placeholder="합방, 일상, 토크" maxlength="10">
       <br>
@@ -37,36 +40,19 @@
 
         </div>
       </div>
-      <div class="detailColor">
-        <div>
-          <p class="subTitle">날짜색</p>
 
-        </div>
-        <div>
-          <p class="subTitle">배경색</p>
+      <p class="send">전송</p>
 
-        </div>
-      </div>
-      <div class="detailColor">
-        <div>
-          <p class="subTitle">날짜색</p>
-
-        </div>
-        <div>
-          <p class="subTitle">배경색</p>
-
-        </div>
-      </div>
-      
     </div>
+  </div>
   </body>
 </html>
 
 <script>
-// let btn =  document.getElementsByClassName("send").item(0);
-// console.log(btn);
-// btn.addEventListener("click", () => {
-//   console.log(1);
-//   extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
-// });
+let btn =  document.getElementsByClassName("send").item(0);
+console.log(btn);
+btn.addEventListener("click", () => {
+  console.log(1);
+  extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
+});
 </script>
