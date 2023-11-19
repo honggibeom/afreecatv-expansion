@@ -1,6 +1,8 @@
 let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
-
+let startDate = null;
+let endDate = null;
+let bjName = null;
 let plan = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
@@ -52,6 +54,29 @@ const makeHeader = () => {
   return header;
 };
 
+const setDuration = (e) => {
+  let duration = document.getElementById("selectedDate");
+  if (endDate !== null) {
+    startDate = new Date(year, month - 1, e);
+    endDate = null;
+    duration.innerText = startDate.toISOString().split("T")[0];
+  } else if (startDate !== null) {
+    let tmp = new Date(year, month - 1, e);
+    if (startDate - tmp > 0) {
+      endDate = startDate;
+      startDate = tmp;
+    } else {
+      endDate = tmp;
+    }
+    duration.innerText =
+      startDate.toISOString().split("T")[0] +
+      endDate.toISOString().split("T")[0];
+  } else {
+    startDate = new Date(year, month - 1, e);
+    duration.innerText = startDate.toISOString().split("T")[0];
+  }
+};
+
 const makeDate = () => {
   let datenum = getDateNum();
   let startDay = getDay();
@@ -81,6 +106,10 @@ const makeDate = () => {
     let p = document.createElement("p");
     p.innerText = i;
     p.setAttribute("class", "day");
+    p.onclick = () => {
+      setDuration();
+      updateCalendar();
+    };
     dateList.appendChild(p);
   }
 
@@ -96,22 +125,6 @@ const makeDate = () => {
   return calendar;
 };
 
-const getDatePosition = (e) => {
-  let datebuf = new Date(year, month - 1, e);
-  let type = -1;
-  if (props.startDate !== null && props.endDate !== null) {
-    let startGap = props.startDate - datebuf;
-    let endGap = props.endDate - datebuf;
-    if (startGap === 0) type = 1;
-    else if (startGap < 0 && endGap > 0) type = 0;
-    else if (endGap === 0) type = 2;
-  } else if (props.startDate !== null) {
-    let startGap = props.startDate - datebuf;
-    if (startGap === 0) type = 3;
-  }
-  return type;
-};
-
 const updateCalendar = () => {
   const calendar = document.getElementById("calendar");
   calendar.innerHTML = "";
@@ -119,23 +132,13 @@ const updateCalendar = () => {
   calendar.appendChild(makeDate());
 };
 
+const savePlan = () => {};
+
+const loadPlan = () => {};
+
 const africaSdkInit = () => {
   const SDK = window.AFREECA.ext;
   const extensionSdk = SDK();
-  const rank = {
-    MESSAGE: {},
-    BALLOON_GIFTED: {},
-    ADBALLOON_GIFTED: {},
-    FANLETTER_GIFTED: {},
-    QUICKVIEW_GIFTED: {},
-    VIDEOBALLOON_GIFTED: {},
-    OGQ_EMOTICON_GIFTED: {},
-    SUBSCRIPTION_GIFTED: {},
-    SUBSCRIBED: {},
-    KEEP_SUBSCRIBED: {},
-    BATTLE_MISSION_GIFTED: {},
-    CHALLENGE_MISSION_GIFTED: {},
-  };
 
   let isLoggedIn = false;
   let isBJ = false;
@@ -145,10 +148,11 @@ const africaSdkInit = () => {
   const init = (auth, broad, player) => {
     isLoggedIn = !!auth.obscureUserId;
     isBJ = auth.isBJ;
-
     broadInfo = broad;
     playerInfo = player;
+    bjName = broad.bjNickname;
   };
+
   extensionSdk.handleInitialization(init);
 
   const handleAuthorized = (data) => {
@@ -172,5 +176,6 @@ const africaSdkInit = () => {
 };
 
 window.onload = () => {
+  africaSdkInit();
   updateCalendar();
 };
