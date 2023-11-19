@@ -1,5 +1,157 @@
+* {
+  font-family: Noto Sans;
+  letter-spacing: -0.24px;
+}
+
+html,
 body {
-  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   height: 100vh;
+  background: #fff7f011;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+  width: 8px;
+  background: #00000033;
+}
+
+#header {
+  position: fixed;
+  display: flex;
+  align-items: center;
   background: #fff;
+  top: 0;
+  width: 100vw;
+  box-shadow: 1px 1px 1px #00000011;
+}
+
+#share,
+#autoShare {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.heaerTitle {
+  width: 60%;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#calendar {
+  width: 96%;
+  padding: 10px 2%;
+}
+
+#detail {
+  width: 90%;
+  padding: 0px 6%;
+  border-top: 1px solid #00000022;
+}
+
+.caleandarHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dayList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 2px 0;
+}
+
+.dateList {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.day {
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 7);
+  margin: 3px 0;
+  height: 30px;
+}
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #981c26;
+  border-radius: 100%;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+}
+
+.subTitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+input[type="text"] {
+  width: 300px;
+  height: 27px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+}
+
+input[type="time"] {
+  width: 300px;
+  height: 27px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+}
+
+textarea {
+  width: 300px;
+  height: 100px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+}
+
+.detailColor {
+  display: flex;
+  gap: 20px;
 }

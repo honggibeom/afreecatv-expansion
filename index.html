@@ -5,21 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>extension</title>
     <script src="https://static.afreecatv.com/asset/app/extension-helper/afreecatv-extension-sdk.js"></script>
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
+    <script src="calendar.js"></script>
     <link href="index.css" rel="stylesheet"></link>
   </head>
   <body>
-    <p>오늘의 아가리 파이터</p>
-    <div id="main"></div>
-    <p id="send" class="send">전송</p>
+
+    <div id="header">
+      <p id="share">시청자와</br><span>공유</span></p>
+      <p class="heaerTitle">afreecatv calendar</p>
+      <p id="autoShare">자동 공유 <br/><span class="">off</span></p>
+    </div>
+    <p style="height: 12px;"></p>
+    <div id="calendar"></div>
+    <div id="detail">
+      <p class="subTitle">방송 유형</p>
+      <input type="text" id="categoryInput" placeholder="합방, 일상, 토크" maxlength="10">
+      <br>
+      <p class="subTitle">방송 시작 시간</p>
+      <p><input type="time"></p>
+      <p class="subTitle">방송 설명</p>
+      <textarea id="detailTextarea" placeholder="방송 설명을 입력하세요."></textarea>
+      <br>
+      <div class="detailColor">
+        <div>
+          <p class="subTitle">날짜색</p>
+
+        </div>
+        <div>
+          <p class="subTitle">배경색</p>
+
+        </div>
+      </div>
+      <div class="detailColor">
+        <div>
+          <p class="subTitle">날짜색</p>
+
+        </div>
+        <div>
+          <p class="subTitle">배경색</p>
+
+        </div>
+      </div>
+      <div class="detailColor">
+        <div>
+          <p class="subTitle">날짜색</p>
+
+        </div>
+        <div>
+          <p class="subTitle">배경색</p>
+
+        </div>
+      </div>
+      
+    </div>
   </body>
 </html>
 
 <script>
-let btn =  document.getElementsByClassName("send").item(0);
-console.log(btn);
-btn.addEventListener("click", () => {
-  console.log(1);
-  extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
-});
+// let btn =  document.getElementsByClassName("send").item(0);
+// console.log(btn);
+// btn.addEventListener("click", () => {
+//   console.log(1);
+//   extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
+// });
 </script>
