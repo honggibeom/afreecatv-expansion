@@ -57,11 +57,11 @@ const makeHeader = () => {
 const setDuration = (e) => {
   let duration = document.getElementById("selectedDate");
   if (endDate !== null) {
-    startDate = new Date(year, month - 1, e);
+    startDate = new Date(year, month - 1, e, 0, 0, 0, 0);
     endDate = null;
     duration.innerText = startDate.toISOString().split("T")[0];
   } else if (startDate !== null) {
-    let tmp = new Date(year, month - 1, e);
+    let tmp = new Date(year, month - 1, e, 0, 0, 0, 0);
     if (startDate - tmp > 0) {
       endDate = startDate;
       startDate = tmp;
@@ -72,7 +72,7 @@ const setDuration = (e) => {
       startDate.toISOString().split("T")[0] +
       endDate.toISOString().split("T")[0];
   } else {
-    startDate = new Date(year, month - 1, e);
+    startDate = new Date(year, month - 1, e, 0, 0, 0, 0);
     duration.innerText = startDate.toISOString().split("T")[0];
   }
 };
@@ -82,7 +82,7 @@ const makeDate = () => {
   let startDay = getDay();
   let endDay = (getDay() + datenum) % 7;
   let calendar = document.createElement("div");
-
+  let hasData = hasDateInPlan();
   let dayList = document.createElement("div");
   dayList.setAttribute("class", "dayList");
 
@@ -102,14 +102,36 @@ const makeDate = () => {
     p.setAttribute("class", "day");
     dateList.appendChild(p);
   }
+
   for (let i = 1; i <= datenum; i++) {
     let p = document.createElement("p");
-    p.innerText = i;
     p.setAttribute("class", "day");
+
+    let circle = document.createElement("span");
+    circle.innerText = i;
+    circle.setAttribute("class", "circle");
+
+    let type = getDurationType(i);
+    if (type === 0) {
+      if (endDate !== null) {
+        p.style.background = "linear-gradient(90deg,#ffffff , 50%,#F5E9EA 50%)";
+      }
+      p.appendChild(circle);
+    } else if (type === 1) {
+      p.innerText = i;
+      p.style.background = "#F5E9EA";
+    } else if (type === 2) {
+      p.style.background = "linear-gradient(90deg, #F5E9EA , 50%,#ffffff 50%)";
+      p.appendChild(circle);
+    } else if (type === -1) {
+      p.innerText = i;
+    }
+
     p.onclick = () => {
-      setDuration();
+      setDuration(i);
       updateCalendar();
     };
+
     dateList.appendChild(p);
   }
 
@@ -132,9 +154,54 @@ const updateCalendar = () => {
   calendar.appendChild(makeDate());
 };
 
-const savePlan = () => {};
+const savePlan = () => {
+  let plandata = JSON.stringify(plan);
+  localStorage.setItem(bjName + "Calendar", plandata);
+};
 
-const loadPlan = () => {};
+const loadPlan = () => {
+  let plandata = localStorage.getItem(bjName + "Calendar");
+  if (plandata !== undefined && plandata !== null) {
+    plan = JSON.parse(plandata);
+  }
+};
+
+const getDurationType = (e) => {
+  // 0 시작일, 1 중간 , 2 종료일 , -1 그 외
+  if (startDate === null) return -1;
+
+  let startYear = startDate.getFullYear();
+  let startMonth = startDate.getMonth() + 1;
+  let date = startDate.getDate();
+
+  if (startYear === year && startMonth == month && date === e) return 0;
+
+  if (endDate === null) return -1;
+  else {
+    let now = new Date(year, month, e, 0, 0, 0, 0);
+    let endYear = endDate.getFullYear();
+    let endMonth = endDate.getMonth() + 1;
+    date = endDate.getDate();
+    if (endYear === year && endMonth == month && date === e) return 2;
+    else if (now - startDate > 0 && endDate - now > 0) {
+      console.log(e);
+      return 1;
+    }
+  }
+
+  return -1;
+};
+
+const hasDateInPlan = () => {
+  let dateNum = getDateNum();
+  let buf = [];
+  for (let i = 0; i < dateNum; i++) {
+    if (Object.hasOwn(plan, year + "-" + month + "" + i)) buf.push(i);
+  }
+  return buf;
+};
+
+const loadDetail = () => {};
 
 const africaSdkInit = () => {
   const SDK = window.AFREECA.ext;
@@ -168,14 +235,40 @@ const africaSdkInit = () => {
   extensionSdk.handleAuthorized(handleAuthorized);
 
   const handleBroadcastReceived = (action, message, fromId) => {
-    if (action === "test") {
-      console.log(message);
+    if (action === "requestBjCalendar") {
+      let plandata = localStorage.getItem(bjName + "Calendar");
+      if (plandata !== undefined && plandata !== null)
+        extensionSdk.broadcast.send("responseBjCalendar", plandata);
+      else extensionSdk.broadcast.send("noDataBjCalendar", "nothing");
     }
   };
+
+  //user
+  const handleUserBroadcastReceived = (action, message, fromId) => {
+    if (action === "responseBjCalendar") {
+      let plandata = JSON.stringify(message);
+      if (plandata !== undefined && plandata !== null) {
+        let afreecaTvCalendar = localStorage.getItem("afreecaTvCalendar");
+        if (afreecaTvCalendar === null || afreecaTvCalendar === undefined)
+          afreecaTvCalendar = {};
+        else afreecaTvCalendar = JSON.parse(afreecaTvCalendar);
+        afreecaTvCalendar[bjName] = plandata;
+        alert("연동이 완료되었습니다");
+      }
+    } else if (action === "noDataBjCalendar") {
+      alert("데이터가 없습니다");
+    }
+  };
+
+  const sendRequest = () => {
+    extensionSdk.broadcast.send("requestBjCalendar", "request");
+  };
+
   extensionSdk.broadcast.listen(handleBroadcastReceived);
 };
 
 window.onload = () => {
   africaSdkInit();
+  loadPlan();
   updateCalendar();
 };
