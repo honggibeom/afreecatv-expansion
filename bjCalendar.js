@@ -187,7 +187,12 @@ const getDurationType = (e) => {
   return -1;
 };
 
-const loadDetail = () => {};
+const makeDetail = () => {
+  if (Object.hasOwn(plan[selectedBj], startDate.toISOString().split("T")[0])) {
+    plan[selectedBj][startDate.toISOString().split("T")[0]]; //현재 선택한 날짜의 일정
+    // 상세 페이지 업데이트
+  }
+};
 
 const africaSdkInit = () => {
   const SDK = window.AFREECA.ext;
