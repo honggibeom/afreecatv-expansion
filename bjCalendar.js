@@ -2,8 +2,8 @@ let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
 let startDate = new Date();
 let isBJ = true;
-let bjName = "홍기범";
-let selectedBj = null;
+let bjName = "기기";
+let selectedBj = "기기";
 let plan = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
@@ -68,7 +68,6 @@ const makeDate = () => {
   let startDay = getDay();
   let endDay = (getDay() + datenum) % 7;
   let calendar = document.createElement("div");
-  let hasData = hasDateInPlan();
   let dayList = document.createElement("div");
 
   dayList.setAttribute("class", "dayList");
@@ -98,10 +97,10 @@ const makeDate = () => {
     circle.innerText = i;
     circle.setAttribute("class", "circle");
     let type = getDurationType(i);
-    if (Object.hasOwn(plan[bjName], year + "-" + month + "-" + i)) {
+    if (Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)) {
       if (type === -1)
         circle.style.background =
-          plan[bjName][year + "-" + month + "-" + i]["background"];
+          plan[selectedBj][year + "-" + month + "-" + i]["background"];
 
       p.appendChild(circle);
     } else {
@@ -169,6 +168,7 @@ const loadPlan = () => {
         document.getElementById("share").style.display = "block";
         document.getElementById("backIcon").style.display = "block";
         selectedBj = e;
+        updateCalendar();
       };
     }
   }
@@ -185,15 +185,6 @@ const getDurationType = (e) => {
   if (startYear === year && startMonth == month && date === e) return 0;
 
   return -1;
-};
-
-const hasDateInPlan = () => {
-  let dateNum = getDateNum();
-  let buf = [];
-  for (let i = 0; i < dateNum; i++) {
-    if (Object.hasOwn(plan, year + "-" + month + "-" + i)) buf.push(i);
-  }
-  return buf;
 };
 
 const loadDetail = () => {};
