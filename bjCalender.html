@@ -1,66 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>extension</title>
-    <script src="https://static.afreecatv.com/asset/app/extension-helper/afreecatv-extension-sdk.js"></script>
-    <script src="bjCalendar.js"></script>
-    <link href="bj.css" rel="stylesheet"></link>
-  </head>
-  <body>
 
-    <div id="header">
-      <p id="autoShare"></p>
-      <p class="heaerTitle">afreecatv calendar</p>      
-      <p id="share">시청자와</br><span style="margin-top:2px;">공유</span></p>
-    </div>
-    <p></p>
-    <div class="wrap">
-      <div id="calendar"></div>
-      
-      <div id="detail">
-        <p class="subTitle">선택된 날짜</p>
-        <p id="selectedDate"></p>
-        <p class="subTitle">방송 유형</p>
-        <input type="text" id="categoryInput" placeholder="합방, 일상, 토크" maxlength="10">
-        <p class="subTitle">방송 시작 시간</p>
-        
-        <p>
-          <input type="time">
-        </p>
-        
-        <p class="subTitle">방송 설명</p>
-        
-        <textarea id="detailTextarea" placeholder="방송 설명을 입력하세요.">          
-        </textarea>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>extension</title>
+  <script src="https://static.afreecatv.com/asset/app/extension-helper/afreecatv-extension-sdk.js"></script>
+  <script src="bjCalendar.js"></script>
+  <link href="bj.css" rel="stylesheet">
+  </link>
+</head>
 
-        <div class="detailColor">
-          
-          <div>
-            <p class="subTitle">날짜색</p>
-          </div>
-          
-          <div>
-            <p class="subTitle">배경색</p>
-          </div>
+<body>
 
-        </div> 
-
+  <div id="header">
+    <p id="back">
+      <img src="./img/left.svg" alt="back" id="backIcon" />
+    </p>
+    <p class="headerTitle">afreecatv calendar</p>
+    <p id="share">시청자와</br><span style="margin-top:2px;">공유</span></p>
+  </div>
+  <div id="slide">
+    <div id="slider">
+      <div class="wrap" id="calendarList">
       </div>
+      <div class="wrap">
 
-      <p class="send">전송</p>
+        <div id="calendar"></div>
 
+        <div id="detail">
+
+          <p class="subTitle">선택된 날짜</p>
+          <p id="selectedDate"></p>
+          <p class="subTitle">방송 유형</p>
+          <input type="text" id="categoryInput" placeholder="합방, 일상, 토크" maxlength="10">
+          <p class="subTitle">방송 시작 시간</p>
+          <p><input type="time"></p>
+          <p class="subTitle">방송 설명</p>
+          <textarea id="detailTextarea" placeholder="방송 설명을 입력하세요.">
+          </textarea>
+
+          <div class="detailColor">
+            <p type="button" class="subTitle">배경색</p>
+            <div>
+              <div class="circle-btn" style="background-color: black;"></div>
+              <div class="circle-btn" style="background-color: purple;"></div>
+              <div class="circle-btn" style="background-color: blue;"></div>
+            </div>
+          </div>
+          <p class="send">전송</p>
+        </div>
+      </div>
     </div>
   </div>
-  </body>
+</body>
+
 </html>
 
 <script>
-let btn =  document.getElementsByClassName("send").item(0);
-console.log(btn);
-btn.addEventListener("click", () => {
-  console.log(1);
-  extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
-});
+  let btn = document.getElementsByClassName("send").item(0);
+  // btn.addEventListener("click", () => {
+  //   extensionSdk.broadcast.send("test", "뭐하누ㅋㅋ");
+  // });
 </script>

@@ -1,8 +1,9 @@
 let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
-let startDate = null;
-let endDate = null;
-let bjName = null;
+let startDate = new Date();
+let isBJ = true;
+let bjName = "홍기범";
+let selectedBj = null;
 let plan = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
@@ -56,25 +57,10 @@ const makeHeader = () => {
 
 const setDuration = (e) => {
   let duration = document.getElementById("selectedDate");
-  if (endDate !== null) {
-    startDate = new Date(year, month - 1, e, 0, 0, 0, 0);
-    endDate = null;
-    duration.innerText = startDate.toISOString().split("T")[0];
-  } else if (startDate !== null) {
-    let tmp = new Date(year, month - 1, e, 0, 0, 0, 0);
-    if (startDate - tmp > 0) {
-      endDate = startDate;
-      startDate = tmp;
-    } else {
-      endDate = tmp;
-    }
-    duration.innerText =
-      startDate.toISOString().split("T")[0] +
-      endDate.toISOString().split("T")[0];
-  } else {
-    startDate = new Date(year, month - 1, e, 0, 0, 0, 0);
-    duration.innerText = startDate.toISOString().split("T")[0];
-  }
+  const offset = new Date().getTimezoneOffset() * 60000;
+  startDate = new Date(year, month - 1, e, 0, 0, 0, 0);
+  startDate = new Date(startDate - offset);
+  duration.innerText = startDate.toISOString().split("T")[0];
 };
 
 const makeDate = () => {
@@ -84,6 +70,7 @@ const makeDate = () => {
   let calendar = document.createElement("div");
   let hasData = hasDateInPlan();
   let dayList = document.createElement("div");
+
   dayList.setAttribute("class", "dayList");
 
   let dateList = document.createElement("div");
@@ -110,25 +97,24 @@ const makeDate = () => {
     let circle = document.createElement("span");
     circle.innerText = i;
     circle.setAttribute("class", "circle");
-
     let type = getDurationType(i);
-    if (type === 0) {
-      if (endDate !== null) {
-        p.style.background = "linear-gradient(90deg,#ffffff , 50%,#F5E9EA 50%)";
+    if (Object.hasOwn(plan[bjName], year + "-" + month + "-" + i)) {
+      if (type === -1)
+        circle.style.background =
+          plan[bjName][year + "-" + month + "-" + i]["background"];
+
+      p.appendChild(circle);
+    } else {
+      if (type === 0) {
+        p.appendChild(circle);
+      } else if (type === -1) {
+        p.innerText = i;
       }
-      p.appendChild(circle);
-    } else if (type === 1) {
-      p.innerText = i;
-      p.style.background = "#F5E9EA";
-    } else if (type === 2) {
-      p.style.background = "linear-gradient(90deg, #F5E9EA , 50%,#ffffff 50%)";
-      p.appendChild(circle);
-    } else if (type === -1) {
-      p.innerText = i;
     }
 
     p.onclick = () => {
       setDuration(i);
+      attachEvent();
       updateCalendar();
     };
 
@@ -147,22 +133,44 @@ const makeDate = () => {
   return calendar;
 };
 
-const updateCalendar = () => {
-  const calendar = document.getElementById("calendar");
-  calendar.innerHTML = "";
-  calendar.appendChild(makeHeader());
-  calendar.appendChild(makeDate());
-};
-
 const savePlan = () => {
   let plandata = JSON.stringify(plan);
-  localStorage.setItem(bjName + "Calendar", plandata);
+  localStorage.setItem("afreecaCalendar", plandata);
 };
 
 const loadPlan = () => {
-  let plandata = localStorage.getItem(bjName + "Calendar");
+  let plandata = localStorage.getItem("afreecaCalendar");
   if (plandata !== undefined && plandata !== null) {
     plan = JSON.parse(plandata);
+    if (isBJ && !Object.hasOwn(plan, bjName)) plan[bjName] = {};
+    const calendarList = document.getElementById("calendarList");
+    for (const e of Object.keys(plan)) {
+      const bjCalendar = document.createElement("div");
+      bjCalendar.setAttribute("class", "bjCalendar");
+
+      const name = document.createElement("p");
+      name.setAttribute("class", "bjName");
+      name.innerText = e;
+
+      const next = document.createElement("p");
+      next.setAttribute("class", "next");
+
+      const nextIcon = document.createElement("img");
+      nextIcon.setAttribute("src", "./img/right.svg");
+      nextIcon.setAttribute("alt", "mext");
+
+      next.appendChild(nextIcon);
+      bjCalendar.appendChild(name);
+      bjCalendar.appendChild(next);
+      calendarList.appendChild(bjCalendar);
+
+      bjCalendar.onclick = () => {
+        document.getElementById("slider").style.transform = "translate(-100vw)";
+        document.getElementById("share").style.display = "block";
+        document.getElementById("backIcon").style.display = "block";
+        selectedBj = e;
+      };
+    }
   }
 };
 
@@ -176,19 +184,6 @@ const getDurationType = (e) => {
 
   if (startYear === year && startMonth == month && date === e) return 0;
 
-  if (endDate === null) return -1;
-  else {
-    let now = new Date(year, month, e, 0, 0, 0, 0);
-    let endYear = endDate.getFullYear();
-    let endMonth = endDate.getMonth() + 1;
-    date = endDate.getDate();
-    if (endYear === year && endMonth == month && date === e) return 2;
-    else if (now - startDate > 0 && endDate - now > 0) {
-      console.log(e);
-      return 1;
-    }
-  }
-
   return -1;
 };
 
@@ -196,7 +191,7 @@ const hasDateInPlan = () => {
   let dateNum = getDateNum();
   let buf = [];
   for (let i = 0; i < dateNum; i++) {
-    if (Object.hasOwn(plan, year + "-" + month + "" + i)) buf.push(i);
+    if (Object.hasOwn(plan, year + "-" + month + "-" + i)) buf.push(i);
   }
   return buf;
 };
@@ -208,7 +203,6 @@ const africaSdkInit = () => {
   const extensionSdk = SDK();
 
   let isLoggedIn = false;
-  let isBJ = false;
   let broadInfo = null; // 방송 정보
   let playerInfo = null; // 플레이어 상태 정보
 
@@ -267,8 +261,68 @@ const africaSdkInit = () => {
   extensionSdk.broadcast.listen(handleBroadcastReceived);
 };
 
+const attachEvent = () => {
+  let back = document.getElementById("back");
+  back.addEventListener("click", () => {
+    document.getElementById("slider").style.transform = "translate(0vw)";
+    document.getElementById("share").style.display = "none";
+    document.getElementById("backIcon").style.display = "none";
+    selectedBj = null;
+  });
+
+  var buttons = document.querySelectorAll(".circle-btn");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", (e) => {
+      buttons.forEach((button) => button.classList.remove("active"));
+      e.target.classList.add("active");
+      switch (i) {
+        case 0:
+          console.log(0);
+          //selectedColor = "#FF0000";
+          break;
+        case 1:
+          console.log(1);
+          //selectedColor = "#00FF00";
+          break;
+        case 2:
+          console.log(2);
+          //selectedColor = "#0000FF";
+          break;
+        default:
+        //selectedColor = "#981c26";
+      }
+    });
+  }
+};
+
+const updateCalendar = () => {
+  const calendar = document.getElementById("calendar");
+  calendar.innerHTML = "";
+  calendar.appendChild(makeHeader());
+  calendar.appendChild(makeDate());
+};
+
 window.onload = () => {
+  // let a = {
+  //   홍기범: {
+  //     "2023-11-21": {
+  //       type: "합방",
+  //       "방송 시작": "22:00",
+  //       content: "누구누구와 합방합니다.",
+  //       background: "#000000",
+  //     },
+  //     "2023-11-22": {
+  //       type: "합방",
+  //       "방송 시작": "22:00",
+  //       content: "누구누구와 합방합니다.",
+  //       background: "#000000",
+  //     },
+  //   },
+  // };
+  // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
+  setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
+  attachEvent();
   updateCalendar();
 };

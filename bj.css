@@ -8,9 +8,24 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background: #fff;
+}
+
+#slide {
+  width: 100vw;
+  margin-top: 60px;
+  overflow: hidden;
+}
+
+#slider {
+  width: 200vw;
+  display: flex;
+  transform: translate(-100vw);
+  transition: 0.3s;
 }
 
 .wrap {
+  width: 100vw;
   height: calc(100vh - 50px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -38,7 +53,7 @@ body {
 }
 
 #share,
-#autoShare {
+#back {
   width: 20%;
   display: flex;
   align-items: center;
@@ -48,13 +63,33 @@ body {
   cursor: pointer;
 }
 
-.heaerTitle {
+#backIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.headerTitle {
   width: 60%;
   font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.bjCalendar {
+  margin: 20px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #00000011;
+}
+.bjName {
+  width: 90%;
+}
+.next {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  width: 10%;
 }
 
 #calendar {
@@ -155,4 +190,16 @@ textarea {
 .detailColor {
   display: flex;
   gap: 20px;
+}
+
+.circle-btn {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #981c26;
+}
+
+.circle-btn.active {
+  border: 2px solid #000000;
 }
