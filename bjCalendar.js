@@ -2,8 +2,8 @@ let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
 let startDate = new Date();
 let isBJ = true;
-let bjName = "기기";
-let selectedBj = "기기";
+let bjName = "bj1";
+let selectedBj = "bj1";
 let plan = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
