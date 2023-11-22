@@ -155,7 +155,51 @@ const makeDate = () => {
 const savePlan = () => {
   let plandata = JSON.stringify(plan);
   localStorage.setItem("afreecaCalendar", plandata);
+  console.log(plan);
+  console.log(plandata);
+  updateCalendar();
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saveButtons = document.querySelector('.saveBtn');
+  let selectedColor = "";
+
+  const colorButtons = document.querySelectorAll(".circleBtn");
+  for (var i = 0; i < colorButtons.length; i++) {
+    colorButtons[i].addEventListener("click", (e) => {
+      colorButtons.forEach((button) => button.classList.remove("active"));
+      e.target.classList.add("active");
+      selectedColor = e.target.style.backgroundColor;
+    });
+  }
+
+  saveButtons.addEventListener('click', () => {
+    if (!plan[selectedBj]) {
+      plan[selectedBj] = {};
+    }
+
+    const currentDate = startDate.toISOString().split("T")[0];
+    if (!plan[selectedBj][currentDate]) {
+      plan[selectedBj][currentDate] = {};
+    }
+
+    const categoryInput = document.getElementById("categoryInput").value;
+    const detailTextarea = document.getElementById("detailTextarea").value;
+    const startTime = document.querySelector('input[type="time"]').value;
+
+    plan[selectedBj][currentDate].type = categoryInput;
+    plan[selectedBj][currentDate].content = detailTextarea;
+    plan[selectedBj][currentDate].startTime = startTime;
+    plan[selectedBj][currentDate].background = selectedColor;
+
+    console.log(plan[selectedBj][currentDate].type);
+    console.log(plan[selectedBj][currentDate].content);
+    console.log(plan[selectedBj][currentDate].startTime);
+    console.log(plan[selectedBj][currentDate].background);
+
+    savePlan();
+  });
+});
 
 const loadPlan = () => {
   let plandata = localStorage.getItem("afreecaCalendar");
@@ -318,34 +362,6 @@ const attachEvent = () => {
     popupBack.style.display = "block";
     popup.style.bottom = 0;
   });
-
-  if (!plan[selectedBj]) {
-    plan[selectedBj] = {};
-  }
-
-  const currentDate = startDate.toISOString().split("T")[0];
-  if (!plan[selectedBj][currentDate]) {
-    plan[selectedBj][currentDate] = {};
-  }
-
-  const categoryInput = document.getElementById("categoryInput").value;
-  const detailTextarea = document.getElementById("detailTextarea").value;
-  const startTime = document.querySelector('input[type="time"]').value;
-  let selectedColor = "";
-
-  const colorButtons = document.querySelectorAll(".circleBtn");
-  for (var i = 0; i < colorButtons.length; i++) {
-    colorButtons[i].addEventListener("click", (e) => {
-      colorButtons.forEach((button) => button.classList.remove("active"));
-      e.target.classList.add("active");
-      selectedColor = e.target.style.backgroundColor;
-    });
-  }
-
-  plan[selectedBj][currentDate].type = categoryInput;
-  plan[selectedBj][currentDate].content = detailTextarea;
-  plan[selectedBj][currentDate].startTime = startTime;
-  plan[selectedBj][currentDate].background = selectedColor;
 };
 
 const updateCalendar = () => {
@@ -356,23 +372,24 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-  let a = {
-    홍기범: {
-      "2023-11-21": {
-        type: "가나다와 합방",
-        startTime: "22:00",
-        content: "누구누구와 합방합니다.",
-        background: "#000000",
+  /*  let a = {
+      홍기범: {
+        "2023-11-21": {
+          type: "가나다와 합방",
+          startTime: "22:00",
+          content: "누구누구와 합방합니다.",
+          background: "#000000",
+        },
+        "2023-11-22": {
+          type: "합방",
+          startTime: "22:00",
+          content: "누구누구와 합방합니다.",
+          background: "#000000",
+        },
       },
-      "2023-11-22": {
-        type: "합방",
-        startTime: "22:00",
-        content: "누구누구와 합방합니다.",
-        background: "#000000",
-      },
-    },
-  };
-  localStorage.setItem("afreecaCalendar", JSON.stringify(a));
+    };
+    */
+  //localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
