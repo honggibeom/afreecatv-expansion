@@ -214,7 +214,17 @@ const makeDetail = () => {
     // 상세 페이지 업데이트
   }
 };
-const removeCalendar = () => {};
+const removeCalendar = () => {
+  delete plan[selectedBj];
+  let plandata = JSON.stringify(plan);
+  localStorage.setItem("afreecaCalendar", plandata);
+  document.getElementById("slider").style.transform = "translate(0vw)";
+  document.getElementById("share").style.display = "none";
+  document.getElementById("backIcon").style.display = "none";
+  selectedBj = null;
+  updateCalendar();
+  alert("삭제되었습니다");
+};
 
 const africaSdkInit = () => {
   const SDK = window.AFREECA.ext;
@@ -302,6 +312,13 @@ const attachEvent = () => {
     popup.style.bottom = "-50vh";
   });
 
+  let deleteBtn = document.getElementsByClassName("delete").item(0);
+  deleteBtn.addEventListener("click", () => {
+    removeCalendar();
+    popupBack.style.display = "block";
+    popup.style.bottom = 0;
+  });
+
   if (!plan[selectedBj]) {
     plan[selectedBj] = {};
   }
@@ -356,7 +373,6 @@ window.onload = () => {
     },
   };
   localStorage.setItem("afreecaCalendar", JSON.stringify(a));
-  console.log(startDate.getDate());
   setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
