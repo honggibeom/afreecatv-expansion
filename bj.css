@@ -230,10 +230,19 @@ textarea {
   border: 2px solid #000000;
 }
 
+.saveButtons {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 4%;
+}
+
 .saveBtn {
   font-size: 13px;
   font-weight: 600;
-  justify-content: flex-end;
+  color: #ffffff;
+  background-color: #981c26;
+  border-radius: 15%;
+  padding: 7px 10px;
 }
 
 .back {
