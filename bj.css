@@ -243,6 +243,7 @@ textarea {
   background-color: #981c26;
   border-radius: 15%;
   padding: 7px 10px;
+  cursor: pointer;
 }
 
 .back {
