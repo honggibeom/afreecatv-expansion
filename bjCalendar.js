@@ -99,7 +99,7 @@ const makeDate = () => {
     let circle = document.createElement("p");
     circle.innerText = i;
     circle.setAttribute("class", "circle");
-    let today = document.createElement("span");
+    let today = document.createElement("p");
     today.setAttribute("class", "today");
     let type = getDurationType(i);
     if (Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)) {
@@ -127,11 +127,6 @@ const makeDate = () => {
     div.appendChild(today);
 
     let now = new Date();
-    console.log(
-      now.getDate() === i,
-      now.getFullYear() === year,
-      now.getMonth() + 1 === month
-    );
     if (
       now.getDate() === i &&
       now.getFullYear() === year &&
@@ -293,6 +288,20 @@ const attachEvent = () => {
     selectedBj = null;
   });
 
+  let menu = document.getElementById("showMenu");
+  let popup = document.getElementsByClassName("popup").item(0);
+  menu.addEventListener("click", () => {
+    popupBack.style.display = "block";
+    popup.style.bottom = 0;
+  });
+
+  let popupBack = document.getElementsByClassName("back").item(0);
+
+  popupBack.addEventListener("click", () => {
+    popupBack.style.display = "none";
+    popup.style.bottom = "-50vh";
+  });
+
   if (!plan[selectedBj]) {
     plan[selectedBj] = {};
   }
@@ -333,7 +342,7 @@ window.onload = () => {
   let a = {
     홍기범: {
       "2023-11-21": {
-        type: "합방",
+        type: "가나다와 합방",
         startTime: "22:00",
         content: "누구누구와 합방합니다.",
         background: "#000000",
