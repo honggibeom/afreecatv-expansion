@@ -133,6 +133,15 @@ const makeDate = () => {
 };
 
 const savePlan = () => {
+  const categoryInput = document.getElementById("categoryInput").value;
+  console.log(categoryInput);
+  
+  if (!plan[selectedBj]) {
+    plan[selectedBj] = {};
+  }
+
+  plan[selectedBj].type = categoryInput;
+
   let plandata = JSON.stringify(plan);
   localStorage.setItem("afreecaCalendar", plandata);
 };
@@ -190,6 +199,9 @@ const getDurationType = (e) => {
 const makeDetail = () => {
   if (Object.hasOwn(plan[selectedBj], startDate.toISOString().split("T")[0])) {
     plan[selectedBj][startDate.toISOString().split("T")[0]]; //현재 선택한 날짜의 일정
+
+
+
     // 상세 페이지 업데이트
   }
 };
@@ -299,26 +311,27 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-  // let a = {
-  //   홍기범: {
-  //     "2023-11-21": {
-  //       type: "합방",
-  //       "방송 시작": "22:00",
-  //       content: "누구누구와 합방합니다.",
-  //       background: "#000000",
-  //     },
-  //     "2023-11-22": {
-  //       type: "합방",
-  //       "방송 시작": "22:00",
-  //       content: "누구누구와 합방합니다.",
-  //       background: "#000000",
-  //     },
-  //   },
-  // };
-  // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
+  let a = {
+    홍기범: {
+      "2023-11-21": {
+        type: "합방",
+        "방송 시작": "22:00",
+        content: "누구누구와 합방합니다.",
+        background: "#000000",
+      },
+      "2023-11-22": {
+        type: "합방",
+        "방송 시작": "22:00",
+        content: "누구누구와 합방합니다.",
+        background: "#000000",
+      },
+    },
+  };
+  localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
   attachEvent();
   updateCalendar();
+  console.log(plan);
 };
