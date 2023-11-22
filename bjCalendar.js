@@ -102,7 +102,7 @@ const makeDate = () => {
     let today = document.createElement("p");
     today.setAttribute("class", "today");
     let type = getDurationType(i);
-    if (Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)) {
+    if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)) {
       if (type === -1) {
         circle.style.background =
           plan[selectedBj][year + "-" + month + "-" + i]["background"];
@@ -119,7 +119,9 @@ const makeDate = () => {
 
     p.onclick = () => {
       setDuration(i);
-      attachEvent();
+      //attachEvent();
+      // 이거 삭제할 때 알림창이 두 번뜨는 오류 범인임
+      // 일단 주석처리 해놓을테니까 알아서 확인하고 삭제
       updateCalendar();
     };
 
@@ -258,6 +260,7 @@ const makeDetail = () => {
     // 상세 페이지 업데이트
   }
 };
+
 const removeCalendar = () => {
   delete plan[selectedBj];
   let plandata = JSON.stringify(plan);
@@ -358,9 +361,15 @@ const attachEvent = () => {
 
   let deleteBtn = document.getElementsByClassName("delete").item(0);
   deleteBtn.addEventListener("click", () => {
-    removeCalendar();
-    popupBack.style.display = "block";
-    popup.style.bottom = 0;
+    let confirmflag = confirm("정말 삭제하시겠습니까?");
+    if (confirmflag) {
+      removeCalendar();
+      popupBack.style.display = "none";
+      popup.style.bottom = "-50vh";
+    } else {
+      popupBack.style.display = "block";
+      popup.style.bottom = 0;
+    }
   });
 };
 
@@ -372,7 +381,7 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-  /*  let a = {
+   /* let a = {
       홍기범: {
         "2023-11-21": {
           type: "가나다와 합방",
@@ -388,8 +397,8 @@ window.onload = () => {
         },
       },
     };
-    */
-  //localStorage.setItem("afreecaCalendar", JSON.stringify(a));
+
+  localStorage.setItem("afreecaCalendar", JSON.stringify(a));*/
   setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
