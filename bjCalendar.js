@@ -204,6 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const loadPlan = () => {
+  // 리스트 초기화 -> 중복 호출 시 기존 리스트를 초기화 하고 다시 렌더링 되도록
+  const calendarList = document.getElementById("calendarList");
+  while (calendarList.firstChild) {
+    calendarList.removeChild(calendarList.firstChild);
+  }
+
   let plandata = localStorage.getItem("afreecaCalendar");
   if (plandata !== undefined && plandata !== null) {
     plan = JSON.parse(plandata);
@@ -271,6 +277,7 @@ const removeCalendar = () => {
   selectedBj = null;
   updateCalendar();
   alert("삭제되었습니다");
+  loadPlan();
 };
 
 const africaSdkInit = () => {
@@ -381,7 +388,7 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-   /* let a = {
+   /*let a = {
       홍기범: {
         "2023-11-21": {
           type: "가나다와 합방",
