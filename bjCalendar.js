@@ -185,7 +185,7 @@ const loadPlan = () => {
 
       bjCalendar.onclick = () => {
         document.getElementById("slider").style.transform = "translate(-100vw)";
-        document.getElementById("share").style.display = "block";
+        document.getElementById("showMenu").style.display = "block";
         document.getElementById("backIcon").style.display = "block";
         selectedBj = e;
         updateCalendar();
@@ -219,7 +219,7 @@ const removeCalendar = () => {
   let plandata = JSON.stringify(plan);
   localStorage.setItem("afreecaCalendar", plandata);
   document.getElementById("slider").style.transform = "translate(0vw)";
-  document.getElementById("share").style.display = "none";
+  document.getElementById("showMenu").style.display = "none";
   document.getElementById("backIcon").style.display = "none";
   selectedBj = null;
   updateCalendar();
@@ -293,7 +293,7 @@ const attachEvent = () => {
   let back = document.getElementById("back");
   back.addEventListener("click", () => {
     document.getElementById("slider").style.transform = "translate(0vw)";
-    document.getElementById("share").style.display = "none";
+    document.getElementById("showMenu").style.display = "none";
     document.getElementById("backIcon").style.display = "none";
     selectedBj = null;
   });
