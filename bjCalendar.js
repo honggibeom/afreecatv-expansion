@@ -61,6 +61,34 @@ const setDuration = (e) => {
   startDate = new Date(year, month - 1, e, 0, 0, 0, 0);
   startDate = new Date(startDate - offset);
   duration.innerText = startDate.toISOString().split("T")[0];
+  loadSelectedDateInfo(e);
+};
+
+// 선택된 날짜에 대한 정보를 가져와 입력폼 채움
+const loadSelectedDateInfo = (selectedDate) => {
+  const currentDate = year + "-" + month + "-" + selectedDate;
+  if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
+    const selectedDayInfo = plan[selectedBj][currentDate];
+
+    document.getElementById("categoryInput").value = selectedDayInfo.type || "";
+    document.getElementById("detailTextarea").value = selectedDayInfo.content || "";
+    document.querySelector('input[type="time"]').value = selectedDayInfo.startTime || "";
+    
+    const selectedColor = selectedDayInfo.background || "";
+    const colorButtons = document.querySelectorAll(".circleBtn");
+    colorButtons.forEach((button) => {
+      button.classList.remove("active");
+      if (button.style.backgroundColor === selectedColor) {
+        button.classList.add("active");
+      }
+    });
+  } else {
+    document.getElementById("categoryInput").value = "";
+    document.getElementById("detailTextarea").value = "";
+    document.querySelector('input[type="time"]').value = "";
+    const colorButtons = document.querySelectorAll(".circleBtn");
+    colorButtons.forEach((button) => button.classList.remove("active"));
+  }
 };
 
 const makeDate = () => {
@@ -119,9 +147,6 @@ const makeDate = () => {
 
     p.onclick = () => {
       setDuration(i);
-      //attachEvent();
-      // 이거 삭제할 때 알림창이 두 번뜨는 오류 범인임
-      // 일단 주석처리 해놓을테니까 알아서 확인하고 삭제
       updateCalendar();
     };
 
@@ -262,7 +287,7 @@ const getDurationType = (e) => {
 const makeDetail = () => {
   if (Object.hasOwn(plan[selectedBj], startDate.toISOString().split("T")[0])) {
     plan[selectedBj][startDate.toISOString().split("T")[0]]; //현재 선택한 날짜의 일정
-
+    console.log(broadInfo.bjNickname);
     // 상세 페이지 업데이트
   }
 };
@@ -388,7 +413,7 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-   /*let a = {
+   let a = {
       홍기범: {
         "2023-11-21": {
           type: "가나다와 합방",
@@ -405,7 +430,7 @@ window.onload = () => {
       },
     };
 
-  localStorage.setItem("afreecaCalendar", JSON.stringify(a));*/
+  localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
