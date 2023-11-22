@@ -76,12 +76,20 @@ body {
   align-items: center;
   justify-content: center;
 }
+#calendarList {
+  background: rgba(0, 0, 0, 0.15);
+}
+
 .bjCalendar {
   margin: 20px 20px;
+  padding: 0px 20px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #00000011;
+  color: #000;
+  background-color: #ffffff;
+  border-radius: 12px;
 }
+
 .bjName {
   width: 90%;
 }
@@ -133,9 +141,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(100% / 7);
+  width: 100%;
   margin: 3px 0;
   height: 30px;
+  margin-bottom: 2px;
+}
+
+.today {
+  margin: 1px 0;
+  width: 100%;
+  font-size: 10px;
+  text-align: center;
+}
+
+.emptyday {
+  width: calc(100% / 7);
+}
+
+.todayContainer {
+  text-align: center;
+  width: calc(100% / 7);
 }
 
 .circle {
@@ -147,6 +172,7 @@ body {
   color: #fff;
   width: 30px;
   height: 30px;
+  margin: 0;
 }
 
 .subTitle {
@@ -187,12 +213,12 @@ textarea {
   background-color: rgb(233, 233, 233);
 }
 
-.detailColor {
+.colorButtons {
   display: flex;
-  gap: 20px;
+  gap: 10px;
 }
 
-.circle-btn {
+.circleBtn {
   display: inline-block;
   height: 20px;
   width: 20px;
@@ -200,6 +226,12 @@ textarea {
   background-color: #981c26;
 }
 
-.circle-btn.active {
+.circleBtn.active {
   border: 2px solid #000000;
+}
+
+.saveBtn {
+  font-size: 13px;
+  font-weight: 600;
+  justify-content: flex-end;
 }

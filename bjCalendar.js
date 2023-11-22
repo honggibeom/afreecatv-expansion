@@ -85,23 +85,29 @@ const makeDate = () => {
   for (let i = 0; i < startDay; i++) {
     let p = document.createElement("p");
     p.innerText = " ";
-    p.setAttribute("class", "day");
+    p.setAttribute("class", "emptyday");
     dateList.appendChild(p);
   }
 
   for (let i = 1; i <= datenum; i++) {
+    let div = document.createElement("div");
+    div.setAttribute("class", "todayContainer");
+
     let p = document.createElement("p");
     p.setAttribute("class", "day");
 
-    let circle = document.createElement("span");
+    let circle = document.createElement("p");
     circle.innerText = i;
     circle.setAttribute("class", "circle");
+    let today = document.createElement("span");
+    today.setAttribute("class", "today");
     let type = getDurationType(i);
     if (Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)) {
-      if (type === -1)
+      if (type === -1) {
         circle.style.background =
           plan[selectedBj][year + "-" + month + "-" + i]["background"];
-
+      }
+      today.innerText = plan[selectedBj][year + "-" + month + "-" + i].type;
       p.appendChild(circle);
     } else {
       if (type === 0) {
@@ -117,31 +123,41 @@ const makeDate = () => {
       updateCalendar();
     };
 
-    dateList.appendChild(p);
+    div.appendChild(p);
+    div.appendChild(today);
+
+    let now = new Date();
+    console.log(
+      now.getDate() === i,
+      now.getFullYear() === year,
+      now.getMonth() + 1 === month
+    );
+    if (
+      now.getDate() === i &&
+      now.getFullYear() === year &&
+      now.getMonth() + 1 === month
+    ) {
+      let today1 = document.createElement("p");
+      today1.setAttribute("class", "today");
+      today1.innerText = "today";
+      div.appendChild(today1);
+    }
+
+    dateList.appendChild(div);
   }
 
   for (let i = 6; i > endDay; i--) {
     let p = document.createElement("p");
     p.innerText = " ";
-    p.setAttribute("class", "day");
+    p.setAttribute("class", "emptyday");
     dateList.appendChild(p);
   }
-
   calendar.appendChild(dayList);
   calendar.appendChild(dateList);
   return calendar;
 };
 
 const savePlan = () => {
-  const categoryInput = document.getElementById("categoryInput").value;
-  console.log(categoryInput);
-  
-  if (!plan[selectedBj]) {
-    plan[selectedBj] = {};
-  }
-
-  plan[selectedBj].type = categoryInput;
-
   let plandata = JSON.stringify(plan);
   localStorage.setItem("afreecaCalendar", plandata);
 };
@@ -200,11 +216,10 @@ const makeDetail = () => {
   if (Object.hasOwn(plan[selectedBj], startDate.toISOString().split("T")[0])) {
     plan[selectedBj][startDate.toISOString().split("T")[0]]; //현재 선택한 날짜의 일정
 
-
-
     // 상세 페이지 업데이트
   }
 };
+const removeCalendar = () => {};
 
 const africaSdkInit = () => {
   const SDK = window.AFREECA.ext;
@@ -278,29 +293,33 @@ const attachEvent = () => {
     selectedBj = null;
   });
 
-  var buttons = document.querySelectorAll(".circle-btn");
-  for (var i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", (e) => {
-      buttons.forEach((button) => button.classList.remove("active"));
+  if (!plan[selectedBj]) {
+    plan[selectedBj] = {};
+  }
+
+  const currentDate = startDate.toISOString().split("T")[0];
+  if (!plan[selectedBj][currentDate]) {
+    plan[selectedBj][currentDate] = {};
+  }
+
+  const categoryInput = document.getElementById("categoryInput").value;
+  const detailTextarea = document.getElementById("detailTextarea").value;
+  const startTime = document.querySelector('input[type="time"]').value;
+  let selectedColor = "";
+
+  const colorButtons = document.querySelectorAll(".circleBtn");
+  for (var i = 0; i < colorButtons.length; i++) {
+    colorButtons[i].addEventListener("click", (e) => {
+      colorButtons.forEach((button) => button.classList.remove("active"));
       e.target.classList.add("active");
-      switch (i) {
-        case 0:
-          console.log(0);
-          //selectedColor = "#FF0000";
-          break;
-        case 1:
-          console.log(1);
-          //selectedColor = "#00FF00";
-          break;
-        case 2:
-          console.log(2);
-          //selectedColor = "#0000FF";
-          break;
-        default:
-        //selectedColor = "#981c26";
-      }
+      selectedColor = e.target.style.backgroundColor;
     });
   }
+
+  plan[selectedBj][currentDate].type = categoryInput;
+  plan[selectedBj][currentDate].content = detailTextarea;
+  plan[selectedBj][currentDate].startTime = startTime;
+  plan[selectedBj][currentDate].background = selectedColor;
 };
 
 const updateCalendar = () => {
@@ -315,19 +334,20 @@ window.onload = () => {
     홍기범: {
       "2023-11-21": {
         type: "합방",
-        "방송 시작": "22:00",
+        startTime: "22:00",
         content: "누구누구와 합방합니다.",
         background: "#000000",
       },
       "2023-11-22": {
         type: "합방",
-        "방송 시작": "22:00",
+        startTime: "22:00",
         content: "누구누구와 합방합니다.",
         background: "#000000",
       },
     },
   };
   localStorage.setItem("afreecaCalendar", JSON.stringify(a));
+  console.log(startDate.getDate());
   setDuration(startDate.getDate());
   africaSdkInit();
   loadPlan();
