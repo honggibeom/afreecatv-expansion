@@ -2,8 +2,8 @@ let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
 let startDate = new Date();
 let isBJ = true;
-let bjName = "bj1";
-let selectedBj = "bj1";
+let bjName = null;
+let selectedBj = null;
 let plan = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
@@ -69,10 +69,11 @@ const setDuration = (e) => {
 const loadSelectedDateInfo = (selectedDate) => {
   const currentDate = year + "-" + month + "-" + selectedDate;
 
-  if (false) { // 본인이 아닐 경우
+  if (false) {
+    // 본인이 아닐 경우
     // 입력폼(categoryInput, time, detailTextarea, detailColor, saveButtons) 모두 삭제 후
     // p 태그로 새로 추가하여 각 정보들 모두 받아와 화면에 보여주기
-    
+
     const selectedCategory = document.getElementById("categoryInput");
     selectedCategory.innerHTML = "";
     const selectedTextArea = document.getElementById("detailTextarea");
@@ -88,7 +89,6 @@ const loadSelectedDateInfo = (selectedDate) => {
       console.log(selectedDayInfo);
       const keys = Object.keys(selectedDayInfo);
       keys.forEach((key) => {
-
         console.log("key");
         console.log(key);
         console.log("value");
@@ -100,16 +100,19 @@ const loadSelectedDateInfo = (selectedDate) => {
         selectedCategory.appendChild(infoElement);
       });
     }
-
-  } else { // 본인일 경우
+  } else {
+    // 본인일 경우
     console.log("테스트 코드222");
     console.log(plan[selectedBj]);
     if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
       const selectedDayInfo = plan[selectedBj][currentDate];
 
-      document.getElementById("categoryInput").value = selectedDayInfo.type || "";
-      document.getElementById("detailTextarea").value = selectedDayInfo.content || "";
-      document.querySelector('input[type="time"]').value = selectedDayInfo.startTime || "";
+      document.getElementById("categoryInput").value =
+        selectedDayInfo.type || "";
+      document.getElementById("detailTextarea").value =
+        selectedDayInfo.content || "";
+      document.querySelector('input[type="time"]').value =
+        selectedDayInfo.startTime || "";
 
       const selectedColor = selectedDayInfo.background || "";
       const colorButtons = document.querySelectorAll(".circleBtn");
@@ -168,15 +171,22 @@ const makeDate = () => {
     let today = document.createElement("p");
     today.setAttribute("class", "today");
     let type = getDurationType(i);
-    if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)) {
-      if (type === -1) {
-        circle.style.background =
-          plan[selectedBj][year + "-" + month + "-" + i]["background"];
+    if (
+      plan[selectedBj] &&
+      Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)
+    ) {
+      circle.style.background =
+        plan[selectedBj][year + "-" + month + "-" + i]["background"];
+      if (type === 0) {
+        circle.style.border = "1px solid #000000";
       }
+
       today.innerText = plan[selectedBj][year + "-" + month + "-" + i].type;
       p.appendChild(circle);
     } else {
       if (type === 0) {
+        circle.style.color = "#000000";
+        circle.style.border = "1px solid #000000";
         p.appendChild(circle);
       } else if (type === -1) {
         p.innerText = i;
@@ -225,8 +235,8 @@ const savePlan = () => {
   updateCalendar();
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const saveButtons = document.querySelector('.saveBtn');
+document.addEventListener("DOMContentLoaded", () => {
+  const saveButtons = document.querySelector(".saveBtn");
   let selectedColor = "";
 
   const colorButtons = document.querySelectorAll(".circleBtn");
@@ -238,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  saveButtons.addEventListener('click', () => {
+  saveButtons.addEventListener("click", () => {
     if (!plan[selectedBj]) {
       plan[selectedBj] = {};
     }
@@ -276,8 +286,10 @@ const loadPlan = () => {
   let plandata = localStorage.getItem("afreecaCalendar");
   if (plandata !== undefined && plandata !== null) {
     plan = JSON.parse(plandata);
-    if (isBJ && !Object.hasOwn(plan, bjName)) plan[bjName] = {};
+    if (isBJ && !Object.hasOwn(plan, bjName) && bjName !== null)
+      plan[bjName] = {};
     const calendarList = document.getElementById("calendarList");
+    calendarList.innerHTML = "";
     for (const e of Object.keys(plan)) {
       const bjCalendar = document.createElement("div");
       bjCalendar.setAttribute("class", "bjCalendar");
@@ -300,8 +312,8 @@ const loadPlan = () => {
 
       bjCalendar.onclick = () => {
         document.getElementById("slider").style.transform = "translate(-100vw)";
-        document.getElementById("showMenu").style.display = "block";
-        document.getElementById("backIcon").style.display = "block";
+        document.getElementById("showMenu").style.display = "flex";
+        document.getElementById("backIcon").style.display = "flex";
         selectedBj = e;
         updateCalendar();
       };
