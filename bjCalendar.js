@@ -284,11 +284,16 @@ const getDurationType = (e) => {
   return -1;
 };
 
+// 상세 페이지 업데이트
 const makeDetail = () => {
   if (Object.hasOwn(plan[selectedBj], startDate.toISOString().split("T")[0])) {
     plan[selectedBj][startDate.toISOString().split("T")[0]]; //현재 선택한 날짜의 일정
     console.log(broadInfo.bjNickname);
-    // 상세 페이지 업데이트
+    if(bjName){ // 본인일 경우
+
+    } else { // 본인이 아닐 경우
+
+    }
   }
 };
 
