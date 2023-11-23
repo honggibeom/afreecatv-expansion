@@ -347,6 +347,14 @@ const removeCalendar = () => {
   loadPlan();
 };
 
+const removeDayPlan = () => {
+  delete plan[selectedBj][startDate.toISOString().split("T")[0]];
+  let plandata = JSON.stringify(plan);
+  localStorage.setItem("afreecaCalendar", plandata);
+  alert("삭제되었습니다");
+  updateCalendar();
+};
+
 const africaSdkInit = () => {
   const SDK = window.AFREECA.ext;
   const extensionSdk = SDK();
