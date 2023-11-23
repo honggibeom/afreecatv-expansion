@@ -64,30 +64,68 @@ const setDuration = (e) => {
   loadSelectedDateInfo(e);
 };
 
-// 선택된 날짜에 대한 정보를 가져와 입력폼 채움
+// 선택된 날짜에 대한 정보를 가져옴
+// 이때 bjName과 selectedBj가 다를 경우와 같을 경우 상세 페이지 정보를 다르게 보여줌
 const loadSelectedDateInfo = (selectedDate) => {
   const currentDate = year + "-" + month + "-" + selectedDate;
-  if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
-    const selectedDayInfo = plan[selectedBj][currentDate];
 
-    document.getElementById("categoryInput").value = selectedDayInfo.type || "";
-    document.getElementById("detailTextarea").value = selectedDayInfo.content || "";
-    document.querySelector('input[type="time"]').value = selectedDayInfo.startTime || "";
+  if (false) { // 본인이 아닐 경우
+    // 입력폼(categoryInput, time, detailTextarea, detailColor, saveButtons) 모두 삭제 후
+    // p 태그로 새로 추가하여 각 정보들 모두 받아와 화면에 보여주기
     
-    const selectedColor = selectedDayInfo.background || "";
-    const colorButtons = document.querySelectorAll(".circleBtn");
-    colorButtons.forEach((button) => {
-      button.classList.remove("active");
-      if (button.style.backgroundColor === selectedColor) {
-        button.classList.add("active");
-      }
-    });
-  } else {
-    document.getElementById("categoryInput").value = "";
-    document.getElementById("detailTextarea").value = "";
-    document.querySelector('input[type="time"]').value = "";
-    const colorButtons = document.querySelectorAll(".circleBtn");
-    colorButtons.forEach((button) => button.classList.remove("active"));
+    const selectedCategory = document.getElementById("categoryInput");
+    selectedCategory.innerHTML = "";
+    const selectedTextArea = document.getElementById("detailTextarea");
+    selectedTextArea.innerHTML = "";
+    const selectedTime = document.querySelector('input[type="time"]');
+    selectedTime.innerHTML = "";
+
+    console.log("테스트 코드111");
+    console.log(plan[selectedBj]);
+
+    if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
+      const selectedDayInfo = plan[selectedBj][currentDate];
+      console.log(selectedDayInfo);
+      const keys = Object.keys(selectedDayInfo);
+      keys.forEach((key) => {
+
+        console.log("key");
+        console.log(key);
+        console.log("value");
+        console.log(selectedDayInfo[key]);
+
+        const value = selectedDayInfo[key];
+        const infoElement = document.createElement("p");
+        infoElement.innerText = `${key}: ${value}`;
+        selectedCategory.appendChild(infoElement);
+      });
+    }
+
+  } else { // 본인일 경우
+    console.log("테스트 코드222");
+    console.log(plan[selectedBj]);
+    if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
+      const selectedDayInfo = plan[selectedBj][currentDate];
+
+      document.getElementById("categoryInput").value = selectedDayInfo.type || "";
+      document.getElementById("detailTextarea").value = selectedDayInfo.content || "";
+      document.querySelector('input[type="time"]').value = selectedDayInfo.startTime || "";
+
+      const selectedColor = selectedDayInfo.background || "";
+      const colorButtons = document.querySelectorAll(".circleBtn");
+      colorButtons.forEach((button) => {
+        button.classList.remove("active");
+        if (button.style.backgroundColor === selectedColor) {
+          button.classList.add("active");
+        }
+      });
+    } else {
+      document.getElementById("categoryInput").value = "";
+      document.getElementById("detailTextarea").value = "";
+      document.querySelector('input[type="time"]').value = "";
+      const colorButtons = document.querySelectorAll(".circleBtn");
+      colorButtons.forEach((button) => button.classList.remove("active"));
+    }
   }
 };
 
@@ -284,19 +322,6 @@ const getDurationType = (e) => {
   return -1;
 };
 
-// 상세 페이지 업데이트
-const makeDetail = () => {
-  if (Object.hasOwn(plan[selectedBj], startDate.toISOString().split("T")[0])) {
-    plan[selectedBj][startDate.toISOString().split("T")[0]]; //현재 선택한 날짜의 일정
-    console.log(broadInfo.bjNickname);
-    if(bjName){ // 본인일 경우
-
-    } else { // 본인이 아닐 경우
-
-    }
-  }
-};
-
 const removeCalendar = () => {
   delete plan[selectedBj];
   let plandata = JSON.stringify(plan);
@@ -418,22 +443,22 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-   let a = {
-      홍기범: {
-        "2023-11-21": {
-          type: "가나다와 합방",
-          startTime: "22:00",
-          content: "누구누구와 합방합니다.",
-          background: "#000000",
-        },
-        "2023-11-22": {
-          type: "합방",
-          startTime: "22:00",
-          content: "누구누구와 합방합니다.",
-          background: "#000000",
-        },
+  let a = {
+    홍기범: {
+      "2023-11-21": {
+        type: "가나다와 합방",
+        startTime: "22:00",
+        content: "누구누구와 합방합니다.",
+        background: "#000000",
       },
-    };
+      "2023-11-22": {
+        type: "합방",
+        startTime: "22:00",
+        content: "누구누구와 합방합니다.",
+        background: "#000000",
+      },
+    },
+  };
 
   localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   setDuration(startDate.getDate());
