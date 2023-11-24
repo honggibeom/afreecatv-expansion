@@ -144,23 +144,34 @@ const loadSelectedDateInfo = (selectedDate) => {
 
       const selectedColor = selectedDayInfo.background || "";
       const colorButtons = document.querySelectorAll(".circleBtn");
-      colorButtons.forEach((button) => {
-        button.classList.remove("active");
-        if (button.style.backgroundColor === selectedColor) {
-          button.classList.add("active");
-        }
-      });
+
+      const colorList = {
+        "": 0,
+      };
+      let idx = 0;
+      for (const e of colorButtons) {
+        let tmp_color =
+          e.style.backgroundColor === "white"
+            ? "white"
+            : e.style.backgroundColor;
+        colorList[tmp_color] = idx;
+        idx++;
+        e.style.border = "2px solid " + tmp_color;
+      }
+      colorButtons[colorList[selectedColor]].style.border = "2px solid #000000";
     } else {
       document.getElementById("categoryInput").value = "";
       document.getElementById("detailTextarea").value = "";
       document.querySelector('input[type="time"]').value = "";
       const colorButtons = document.querySelectorAll(".circleBtn");
-      colorButtons.forEach((button) => {
-        button.classList.remove("active");
-        if (button.style.color === "black") {
-          button.classList.add("active");
-        }
-      });
+      for (const e of colorButtons) {
+        let tmp_color =
+          e.style.backgroundColor === "white"
+            ? "white"
+            : e.style.backgroundColor;
+        e.style.border = "2px solid " + tmp_color;
+      }
+      colorButtons[0].style.border = "2px solid #000000";
     }
   }
 };
@@ -307,10 +318,9 @@ const loadPlan = () => {
 
   // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   // 리스트 초기화 -> 중복 호출 시 기존 리스트를 초기화 하고 다시 렌더링 되도록
-  console.log(localStorage.getItem("afreecaCalendar"));
   const calendarList = document.getElementById("calendarList");
   let plandata = JSON.parse(localStorage.getItem("afreecaCalendar"));
-  console.log(plandata);
+
   if (plandata !== undefined && plandata !== null) {
     plan = plandata.plan;
     bjImgObj = plandata.bjImgObj;
@@ -370,6 +380,7 @@ const loadPlan = () => {
       document.getElementsByClassName("headerTitle").item(0).innerText =
         bjNicknameObj[e] + "님의 Calendar";
       updateCalendar();
+      loadSelectedDateInfo(startDate.getDate());
     };
   }
   const bottom = document.createElement("P");
@@ -492,15 +503,23 @@ const attachEvent = () => {
   let selectedColor = "";
 
   const colorButtons = document.querySelectorAll(".circleBtn");
-  for (var i = 0; i < colorButtons.length; i++) {
-    colorButtons[i].addEventListener("click", (e) => {
-      let target = e.target;
-      if (target.tagName.toLowerCase() === "img") {
-        target = target.parentNode;
+
+  for (const e of colorButtons) {
+    let tmp_color =
+      e.style.backgroundColor === "white" ? "white" : e.style.backgroundColor;
+    e.style.border = "2px solid " + tmp_color;
+
+    e.onclick = (event) => {
+      const colorButtons = document.querySelectorAll(".circleBtn");
+      for (const e of colorButtons) {
+        let tmp_color =
+          e.style.backgroundColor === "" ? "white" : e.style.backgroundColor;
+        if (event.target.style.backgroundColor === tmp_color)
+          e.style.border = "2px solid #000000";
+        else e.style.border = "2px solid " + tmp_color;
       }
-      target.classList.add("active");
-      selectedColor = target.style.backgroundColor;
-    });
+      selectedColor = event.target.style.backgroundColor;
+    };
   }
 
   saveButtons.addEventListener("click", () => {
