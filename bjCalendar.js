@@ -168,7 +168,12 @@ const loadSelectedDateInfo = (selectedDate) => {
       document.getElementById("detailTextarea").value = "";
       document.querySelector('input[type="time"]').value = "";
       const colorButtons = document.querySelectorAll(".circleBtn");
-      colorButtons.forEach((button) => button.classList.remove("active"));
+      colorButtons.forEach(button => {
+        button.classList.remove("active");
+        if (button.style.color === 'black') {
+          button.classList.add("active");
+        }
+      });
     }
   }
 };
@@ -234,7 +239,8 @@ const makeDate = () => {
       p.appendChild(circle);
     } else {
       if (type === 0) {
-        circle.style.color = "#000000";
+        circle.style.backgroundColor = 'white';
+        circle.style.color = 'black';
         circle.style.border = "1px solid #000000";
         p.appendChild(circle);
       } else if (type === -1) {
@@ -461,17 +467,16 @@ const attachEvent = () => {
     document.getElementById("slider").style.transform = "translate(0vw)";
     document.getElementById("share").style.display = "none";
     document.getElementById("backIcon").style.display = "none";
-    document.getElementsByClassName("headerTitle").item(0).innerText =
-      "afreecatv calendar";
+    document.getElementsByClassName("headerTitle").item(0).innerText = "afreecatv calendar";
     selectedBj = null;
   });
 
   // 저장 버튼 클릭 시 해당 날짜 일정 저장
   const saveButtons = document.querySelector(".saveBtn");
-  let selectedColor = "";
+let selectedColor = "";
 
   const colorButtons = document.querySelectorAll(".circleBtn");
-  for (var i = 0; i < colorButtons.length; i++) {
+    for (var i = 0; i < colorButtons.length; i++) {
     colorButtons[i].addEventListener("click", (e) => {
       colorButtons.forEach((button) => button.classList.remove("active"));
       e.target.classList.add("active");
@@ -494,6 +499,12 @@ const attachEvent = () => {
     plan[selectedBj][currentDate].startTime = startTime;
     plan[selectedBj][currentDate].background = selectedColor;
 
+    // if (selectedColor && selectedColor !== 'white') {
+    //   plan[selectedBj][currentDate].background = selectedColor;
+    // } else {
+    //   plan[selectedBj][currentDate].background = null;
+    // }
+    
     //console.log(plan[selectedBj][currentDate].type);
     //console.log(plan[selectedBj][currentDate].content);
     //console.log(plan[selectedBj][currentDate].startTime);
