@@ -76,7 +76,8 @@ const setDuration = (e) => {
 const loadSelectedDateInfo = (selectedDate) => {
   const currentDate = year + "-" + month + "-" + selectedDate;
 
-  if (true) { // 본인이 아닐 경우
+  if (false) {
+    // 본인이 아닐 경우
     console.log("테스트");
     console.log(plan[selectedBj]);
     document.getElementById("categoryInput").disabled = true;
@@ -84,28 +85,28 @@ const loadSelectedDateInfo = (selectedDate) => {
     document.querySelector('input[type="time"]').disabled = true;
 
     // 저장 버튼 삭제
-    let saveBtn = document.getElementsByClassName('saveBtn');
-    while(saveBtn.length > 0){
+    let saveBtn = document.getElementsByClassName("saveBtn");
+    while (saveBtn.length > 0) {
       saveBtn[0].parentNode.removeChild(saveBtn[0]);
     }
 
     // 배경색 삭제
-    let detailColor = document.getElementsByClassName('detailColor');
-    while(detailColor.length > 0){
+    let detailColor = document.getElementsByClassName("detailColor");
+    while (detailColor.length > 0) {
       detailColor[0].parentNode.removeChild(detailColor[0]);
     }
 
     // 시청자와의 공유 버튼 삭제
-    let menu = document.getElementsByClassName('menu');
-    while(menu.length > 0){
+    let menu = document.getElementsByClassName("menu");
+    while (menu.length > 0) {
       menu[0].parentNode.removeChild(menu[0]);
     }
 
-    // 선택된 날짜 삭제 버튼 삭제 추가
-    // let deleteBtn = document.getElementsByClassName('deleteBtn');
-    // while(deleteBtn.length > 0){
-    //   deleteBtn[0].parentNode.removeChild(deleteBtn[0]);
-    // }
+    // 선택된 날짜 삭제 버튼 삭제
+    let deleteBtn = document.getElementsByClassName("deleteBtn");
+    while (deleteBtn.length > 0) {
+      deleteBtn[0].parentNode.removeChild(deleteBtn[0]);
+    }
 
     if (
       plan[selectedBj] &&
@@ -129,14 +130,15 @@ const loadSelectedDateInfo = (selectedDate) => {
           button.classList.add("active");
         }
       });
-
     } else {
       document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
-      document.getElementById("detailTextarea").value = "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
-      document.querySelector('input[type="time"]').value = "방송 시작 시간이 없습니다.";
-
+      document.getElementById("detailTextarea").value =
+        "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
+      document.querySelector('input[type="time"]').value =
+        "방송 시작 시간이 없습니다.";
     }
-  } else { // 본인일 경우
+  } else {
+    // 본인일 경우
     console.log("테스트222");
     console.log(plan[selectedBj]);
     if (
@@ -283,47 +285,6 @@ const savePlan = () => {
   updateCalendar();
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const saveButtons = document.querySelector(".saveBtn");
-  let selectedColor = "";
-
-  const colorButtons = document.querySelectorAll(".circleBtn");
-  for (var i = 0; i < colorButtons.length; i++) {
-    colorButtons[i].addEventListener("click", (e) => {
-      colorButtons.forEach((button) => button.classList.remove("active"));
-      e.target.classList.add("active");
-      selectedColor = e.target.style.backgroundColor;
-    });
-  }
-
-  saveButtons.addEventListener("click", () => {
-    if (!plan[selectedBj]) {
-      plan[selectedBj] = {};
-    }
-
-    const currentDate = startDate.toISOString().split("T")[0];
-    if (!plan[selectedBj][currentDate]) {
-      plan[selectedBj][currentDate] = {};
-    }
-
-    const categoryInput = document.getElementById("categoryInput").value;
-    const detailTextarea = document.getElementById("detailTextarea").value;
-    const startTime = document.querySelector('input[type="time"]').value;
-
-    plan[selectedBj][currentDate].type = categoryInput;
-    plan[selectedBj][currentDate].content = detailTextarea;
-    plan[selectedBj][currentDate].startTime = startTime;
-    plan[selectedBj][currentDate].background = selectedColor;
-
-    //console.log(plan[selectedBj][currentDate].type);
-    //console.log(plan[selectedBj][currentDate].content);
-    //console.log(plan[selectedBj][currentDate].startTime);
-    //console.log(plan[selectedBj][currentDate].background);
-
-    savePlan();
-  });
-});
-
 const loadPlan = () => {
   // 리스트 초기화 -> 중복 호출 시 기존 리스트를 초기화 하고 다시 렌더링 되도록
   const calendarList = document.getElementById("calendarList");
@@ -348,7 +309,7 @@ const loadPlan = () => {
   bjImgObj[bjName] = bjImg;
   bjNicknameObj[bjName] = bjNickname;
 
-  calendarList.innerHTML = "";
+  //calendarList.innerHTML = "";
   for (const e of Object.keys(plan)) {
     const bjCalendar = document.createElement("div");
     bjCalendar.setAttribute("class", "bjCalendar");
@@ -357,6 +318,9 @@ const loadPlan = () => {
     bjProfileImg.setAttribute("class", "bjimg");
     bjProfileImg.setAttribute("src", bjImgObj[e]);
     bjProfileImg.setAttribute("alt", "bjImg");
+    bjProfileImg.onerror = (e) => {
+      e.target.src = "./img/afreecaImg.gif";
+    };
 
     const info = document.createElement("div");
     info.setAttribute("class", "info");
@@ -366,22 +330,22 @@ const loadPlan = () => {
     name.innerText = bjNicknameObj[e];
 
     const next = document.createElement("p");
-    next.setAttribute("class", "next");
+    next.setAttribute("class", "deleteBjCalendar");
 
     const nextIcon = document.createElement("img");
-    nextIcon.setAttribute("src", "./img/right.svg");
+    nextIcon.setAttribute("src", "./img/close.svg");
     nextIcon.setAttribute("alt", "mext");
 
     next.appendChild(nextIcon);
-    bjCalendar.appendChild(bjProfileImg);
     info.appendChild(name);
     info.appendChild(next);
     bjCalendar.appendChild(info);
+    bjCalendar.appendChild(bjProfileImg);
     calendarList.appendChild(bjCalendar);
 
     bjCalendar.onclick = () => {
       document.getElementById("slider").style.transform = "translate(-100vw)";
-      document.getElementById("showMenu").style.display = "flex";
+      document.getElementById("share").style.display = "flex";
       document.getElementById("backIcon").style.display = "flex";
       selectedBj = e;
       document.getElementsByClassName("headerTitle").item(0).innerText =
@@ -404,22 +368,23 @@ const getDurationType = (e) => {
   return -1;
 };
 
+// 특정 bj 캘린더 삭제
 const removeCalendar = () => {
   delete plan[selectedBj];
   savePlan();
   document.getElementById("slider").style.transform = "translate(0vw)";
-  document.getElementById("showMenu").style.display = "none";
+  document.getElementById("share").style.display = "none";
   document.getElementById("backIcon").style.display = "none";
   selectedBj = null;
   updateCalendar();
-  alert("삭제되었습니다");
   loadPlan();
 };
 
+// 특정 날짜의 일정 삭제
 const removeDayPlan = () => {
+  console.log("삭제");
   delete plan[selectedBj][startDate.toISOString().split("T")[0]];
   savePlan();
-  alert("삭제되었습니다");
   updateCalendar();
 };
 
@@ -439,7 +404,6 @@ const africaSdkInit = () => {
     bjName = broad.bjId;
     bjNickname = broad.bjNickname;
     bjImg = broad.bjThumbnail;
-    console.log(broad);
     loadPlan();
   };
 
@@ -494,39 +458,56 @@ const attachEvent = () => {
   let back = document.getElementById("back");
   back.addEventListener("click", () => {
     document.getElementById("slider").style.transform = "translate(0vw)";
-    document.getElementById("showMenu").style.display = "none";
+    document.getElementById("share").style.display = "none";
     document.getElementById("backIcon").style.display = "none";
     document.getElementsByClassName("headerTitle").item(0).innerText =
       "afreecatv calendar";
     selectedBj = null;
   });
 
-  let menu = document.getElementById("showMenu");
-  let popup = document.getElementsByClassName("popup").item(0);
-  menu.addEventListener("click", () => {
-    popupBack.style.display = "block";
-    popup.style.bottom = 0;
-  });
+  // 저장 버튼 클릭 시 해당 날짜 일정 저장
+  const saveButtons = document.querySelector(".saveBtn");
+  let selectedColor = "";
 
-  let popupBack = document.getElementsByClassName("back").item(0);
+  const colorButtons = document.querySelectorAll(".circleBtn");
+  for (var i = 0; i < colorButtons.length; i++) {
+    colorButtons[i].addEventListener("click", (e) => {
+      colorButtons.forEach((button) => button.classList.remove("active"));
+      e.target.classList.add("active");
+      selectedColor = e.target.style.backgroundColor;
+    });
+  }
 
-  popupBack.addEventListener("click", () => {
-    popupBack.style.display = "none";
-    popup.style.bottom = "-50vh";
-  });
-
-  let deleteBtn = document.getElementsByClassName("delete").item(0);
-  deleteBtn.addEventListener("click", () => {
-    let confirmflag = confirm("정말 삭제하시겠습니까?");
-    if (confirmflag) {
-      removeCalendar();
-      popupBack.style.display = "none";
-      popup.style.bottom = "-50vh";
-    } else {
-      popupBack.style.display = "block";
-      popup.style.bottom = 0;
+  saveButtons.addEventListener("click", () => {
+    if (!plan[selectedBj]) {
+      plan[selectedBj] = {};
     }
+
+    const currentDate = startDate.toISOString().split("T")[0];
+    if (!plan[selectedBj][currentDate]) {
+      plan[selectedBj][currentDate] = {};
+    }
+
+    const categoryInput = document.getElementById("categoryInput").value;
+    const detailTextarea = document.getElementById("detailTextarea").value;
+    const startTime = document.querySelector('input[type="time"]').value;
+
+    plan[selectedBj][currentDate].type = categoryInput;
+    plan[selectedBj][currentDate].content = detailTextarea;
+    plan[selectedBj][currentDate].startTime = startTime;
+    plan[selectedBj][currentDate].background = selectedColor;
+
+    //console.log(plan[selectedBj][currentDate].type);
+    //console.log(plan[selectedBj][currentDate].content);
+    //console.log(plan[selectedBj][currentDate].startTime);
+    //console.log(plan[selectedBj][currentDate].background);
+
+    savePlan();
   });
+
+  // 삭제 버튼 클릭 시 해당 날짜 일정 삭제
+  document.querySelector(".deleteBtn").addEventListener("click", removeDayPlan);
+  savePlan();
 };
 
 const updateCalendar = () => {
