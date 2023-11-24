@@ -209,8 +209,10 @@ const makeDate = () => {
     let circle = document.createElement("p");
     circle.innerText = i;
     circle.setAttribute("class", "circle");
+
     let today = document.createElement("p");
     today.setAttribute("class", "today");
+
     let type = getDurationType(i);
     if (
       plan[selectedBj] &&
@@ -228,7 +230,6 @@ const makeDate = () => {
       if (type === 0) {
         circle.style.border = "1px solid #000000";
       }
-
       today.innerText = plan[selectedBj][year + "-" + month + "-" + i].type;
       p.appendChild(circle);
     } else {
@@ -241,7 +242,7 @@ const makeDate = () => {
       }
     }
 
-    p.onclick = () => {
+    div.onclick = () => {
       setDuration(i);
       updateCalendar();
     };
@@ -479,10 +480,6 @@ const attachEvent = () => {
   }
 
   saveButtons.addEventListener("click", () => {
-    if (!plan[selectedBj]) {
-      plan[selectedBj] = {};
-    }
-
     const currentDate = startDate.toISOString().split("T")[0];
     if (!plan[selectedBj][currentDate]) {
       plan[selectedBj][currentDate] = {};
@@ -503,6 +500,7 @@ const attachEvent = () => {
     //console.log(plan[selectedBj][currentDate].background);
 
     savePlan();
+    console.log(plan[selectedBj]);
   });
 
   // 삭제 버튼 클릭 시 해당 날짜 일정 삭제
