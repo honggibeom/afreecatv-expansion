@@ -246,6 +246,9 @@ textarea {
   color: #000;
   font-size: 15px;
   padding: 0;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
 }
 
 input[type="time"]:disabled {
@@ -253,6 +256,9 @@ input[type="time"]:disabled {
   color: #000;
   font-size: 15px;
   padding: 0;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
 }
 
 textarea:disabled {
@@ -260,7 +266,7 @@ textarea:disabled {
   color: #000;
   font-size: 15px;
   border-radius: 0;
-  padding: initial;
+  padding: 0;
   border: initial;
   outline: initial;
   padding-left: initial;
