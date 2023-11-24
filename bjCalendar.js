@@ -473,7 +473,7 @@ const attachEvent = () => {
 
   // 저장 버튼 클릭 시 해당 날짜 일정 저장
   const saveButtons = document.querySelector(".saveBtn");
-let selectedColor = "";
+  let selectedColor = "";
 
   const colorButtons = document.querySelectorAll(".circleBtn");
     for (var i = 0; i < colorButtons.length; i++) {
@@ -499,18 +499,13 @@ let selectedColor = "";
     plan[selectedBj][currentDate].startTime = startTime;
     plan[selectedBj][currentDate].background = selectedColor;
 
-    // if (selectedColor && selectedColor !== 'white') {
-    //   plan[selectedBj][currentDate].background = selectedColor;
-    // } else {
-    //   plan[selectedBj][currentDate].background = null;
-    // }
-    
     //console.log(plan[selectedBj][currentDate].type);
     //console.log(plan[selectedBj][currentDate].content);
     //console.log(plan[selectedBj][currentDate].startTime);
     //console.log(plan[selectedBj][currentDate].background);
 
     savePlan();
+    selectedColor = "";
     console.log(plan[selectedBj]);
   });
 
