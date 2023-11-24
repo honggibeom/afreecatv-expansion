@@ -13,7 +13,7 @@ body {
 
 #slide {
   width: 100vw;
-  margin-top: 50px;
+  margin-top: 60px;
   overflow: hidden;
 }
 
@@ -41,8 +41,11 @@ body {
   width: 4px;
   background: #00000033;
 }
-
+.bottom {
+  height: 50px;
+}
 #header {
+  min-height: 50px;
   position: fixed;
   display: flex;
   align-items: center;
@@ -80,20 +83,36 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 #calendarList {
-  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .bjCalendar {
-  margin: 20px 20px;
+  margin: 20px 10px;
+  border: 1px solid #c8c8c8;
+  cursor: pointer;
+  max-height: 300px;
+}
+
+.info {
   display: flex;
-  align-items: center;
-  border-bottom: 1px solid #c8c8c8;
+  height: 100px;
+  width: calc(50% - 30px);
+  margin: 0 10px;
+}
+
+.bjImg {
+  width: 100%;
+  object-fit: contain;
 }
 
 .bjName {
   width: 90%;
 }
+
 .next {
   display: flex;
   align-items: center;
@@ -103,7 +122,7 @@ body {
 
 #calendar {
   width: 96%;
-  padding: 30px 2%;
+  padding: 5px 2% 30px 2%;
 }
 
 #detail {
@@ -127,7 +146,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 2px 0;
+  margin: 0 0 10px 0;
 }
 
 .dateList {
@@ -146,13 +165,14 @@ body {
   margin: 3px 0;
   height: 30px;
   margin-bottom: 2px;
+  cursor: pointer;
 }
 
 .today {
   width: 100%;
   font-size: 10px;
   text-align: center;
-  margin: 1px 0;
+  margin: 3px 0;
 }
 
 .emptyday {
@@ -162,6 +182,7 @@ body {
 .todayContainer {
   text-align: center;
   width: calc(100% / 7);
+  min-height: 60px;
 }
 
 .circle {
@@ -173,11 +194,18 @@ body {
   width: 30px;
   height: 30px;
   margin: 0;
+  cursor: pointer;
 }
 
 .subTitle {
   font-size: 13px;
   font-weight: 600;
+}
+
+.selectedDate {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
 }
 
 input[type="text"] {
@@ -204,13 +232,38 @@ input[type="time"] {
 
 textarea {
   width: 95%;
-  height: 100px;
+  height: 120px;
   font-size: 13px;
   border: 0;
   border-radius: 15px;
   outline: none;
   padding-left: 10px;
   background-color: rgb(233, 233, 233);
+}
+
+#categoryInput:disabled {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  padding: 0;
+}
+
+input[type="time"]:disabled {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  padding: 0;
+}
+
+textarea:disabled {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  border-radius: 0;
+  padding: initial;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
 }
 
 .colorButtons {

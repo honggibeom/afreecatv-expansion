@@ -2,9 +2,16 @@ let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
 let startDate = new Date();
 let isBJ = true;
+
 let bjName = null;
+let bjNickname = null;
+let bjImg = null;
+
 let selectedBj = null;
+
 let plan = {};
+let bjImgObj = {};
+let bjNicknameObj = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -69,42 +76,74 @@ const setDuration = (e) => {
 const loadSelectedDateInfo = (selectedDate) => {
   const currentDate = year + "-" + month + "-" + selectedDate;
 
-  if (false) {
-    // 본인이 아닐 경우
-    // 입력폼(categoryInput, time, detailTextarea, detailColor, saveButtons) 모두 삭제 후
-    // p 태그로 새로 추가하여 각 정보들 모두 받아와 화면에 보여주기
-
-    const selectedCategory = document.getElementById("categoryInput");
-    selectedCategory.innerHTML = "";
-    const selectedTextArea = document.getElementById("detailTextarea");
-    selectedTextArea.innerHTML = "";
-    const selectedTime = document.querySelector('input[type="time"]');
-    selectedTime.innerHTML = "";
-
-    console.log("테스트 코드111");
+  if (true) { // 본인이 아닐 경우
+    console.log("테스트");
     console.log(plan[selectedBj]);
+    document.getElementById("categoryInput").disabled = true;
+    document.getElementById("detailTextarea").disabled = true;
+    document.querySelector('input[type="time"]').disabled = true;
 
-    if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
-      const selectedDayInfo = plan[selectedBj][currentDate];
-      console.log(selectedDayInfo);
-      const keys = Object.keys(selectedDayInfo);
-      keys.forEach((key) => {
-        console.log("key");
-        console.log(key);
-        console.log("value");
-        console.log(selectedDayInfo[key]);
-
-        const value = selectedDayInfo[key];
-        const infoElement = document.createElement("p");
-        infoElement.innerText = `${key}: ${value}`;
-        selectedCategory.appendChild(infoElement);
-      });
+    // 저장 버튼 삭제
+    let saveBtn = document.getElementsByClassName('saveBtn');
+    while(saveBtn.length > 0){
+      saveBtn[0].parentNode.removeChild(saveBtn[0]);
     }
-  } else {
-    // 본인일 경우
-    console.log("테스트 코드222");
+
+    // 배경색 삭제
+    let detailColor = document.getElementsByClassName('detailColor');
+    while(detailColor.length > 0){
+      detailColor[0].parentNode.removeChild(detailColor[0]);
+    }
+
+    // 시청자와의 공유 버튼 삭제
+    let menu = document.getElementsByClassName('menu');
+    while(menu.length > 0){
+      menu[0].parentNode.removeChild(menu[0]);
+    }
+
+    // 선택된 날짜 삭제 버튼 삭제 추가
+    // let deleteBtn = document.getElementsByClassName('deleteBtn');
+    // while(deleteBtn.length > 0){
+    //   deleteBtn[0].parentNode.removeChild(deleteBtn[0]);
+    // }
+
+    if (
+      plan[selectedBj] &&
+      plan[selectedBj][currentDate] !== undefined &&
+      plan[selectedBj][currentDate] !== null
+    ) {
+      const selectedDayInfo = plan[selectedBj][currentDate];
+
+      document.getElementById("categoryInput").value =
+        selectedDayInfo.type || "";
+      document.getElementById("detailTextarea").value =
+        selectedDayInfo.content || "";
+      document.querySelector('input[type="time"]').value =
+        selectedDayInfo.startTime || "";
+
+      const selectedColor = selectedDayInfo.background || "";
+      const colorButtons = document.querySelectorAll(".circleBtn");
+      colorButtons.forEach((button) => {
+        button.classList.remove("active");
+        if (button.style.backgroundColor === selectedColor) {
+          button.classList.add("active");
+        }
+      });
+
+    } else {
+      document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
+      document.getElementById("detailTextarea").value = "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
+      document.querySelector('input[type="time"]').value = "방송 시작 시간이 없습니다.";
+
+    }
+  } else { // 본인일 경우
+    console.log("테스트222");
     console.log(plan[selectedBj]);
-    if (plan[selectedBj] && Object.hasOwn(plan[selectedBj], currentDate)) {
+    if (
+      plan[selectedBj] &&
+      plan[selectedBj][currentDate] !== undefined &&
+      plan[selectedBj][currentDate] !== null
+    ) {
       const selectedDayInfo = plan[selectedBj][currentDate];
 
       document.getElementById("categoryInput").value =
@@ -173,10 +212,17 @@ const makeDate = () => {
     let type = getDurationType(i);
     if (
       plan[selectedBj] &&
-      Object.hasOwn(plan[selectedBj], year + "-" + month + "-" + i)
+      plan[selectedBj][year + "-" + month + "-" + i] !== undefined &&
+      plan[selectedBj][year + "-" + month + "-" + i] !== null
     ) {
       circle.style.background =
         plan[selectedBj][year + "-" + month + "-" + i]["background"];
+      if (
+        circle.style.background === "" ||
+        circle.style.background === "#ffffff"
+      )
+        circle.style.color = "#000000";
+
       if (type === 0) {
         circle.style.border = "1px solid #000000";
       }
@@ -228,10 +274,12 @@ const makeDate = () => {
 };
 
 const savePlan = () => {
-  let plandata = JSON.stringify(plan);
+  let plandata = JSON.stringify({
+    plan: plan,
+    bjImgObj: bjImgObj,
+    bjNicknameObj: bjNicknameObj,
+  });
   localStorage.setItem("afreecaCalendar", plandata);
-  console.log(plan);
-  console.log(plandata);
   updateCalendar();
 };
 
@@ -267,10 +315,10 @@ document.addEventListener("DOMContentLoaded", () => {
     plan[selectedBj][currentDate].startTime = startTime;
     plan[selectedBj][currentDate].background = selectedColor;
 
-    console.log(plan[selectedBj][currentDate].type);
-    console.log(plan[selectedBj][currentDate].content);
-    console.log(plan[selectedBj][currentDate].startTime);
-    console.log(plan[selectedBj][currentDate].background);
+    //console.log(plan[selectedBj][currentDate].type);
+    //console.log(plan[selectedBj][currentDate].content);
+    //console.log(plan[selectedBj][currentDate].startTime);
+    //console.log(plan[selectedBj][currentDate].background);
 
     savePlan();
   });
@@ -283,41 +331,63 @@ const loadPlan = () => {
     calendarList.removeChild(calendarList.firstChild);
   }
 
-  let plandata = localStorage.getItem("afreecaCalendar");
+  let plandata = JSON.parse(localStorage.getItem("afreecaCalendar"));
   if (plandata !== undefined && plandata !== null) {
-    plan = JSON.parse(plandata);
-    if (isBJ && !Object.hasOwn(plan, bjName) && bjName !== null)
-      plan[bjName] = {};
-    const calendarList = document.getElementById("calendarList");
-    calendarList.innerHTML = "";
-    for (const e of Object.keys(plan)) {
-      const bjCalendar = document.createElement("div");
-      bjCalendar.setAttribute("class", "bjCalendar");
+    plan = plandata.plan;
+    bjImgObj = plandata.bjImgObj;
+    bjNicknameObj = plandata.bjNicknameObj;
+  }
 
-      const name = document.createElement("p");
-      name.setAttribute("class", "bjName");
-      name.innerText = e;
+  if (
+    isBJ &&
+    bjName !== null &&
+    (plan[bjName] === undefined || plan[bjName] === null)
+  )
+    plan[bjName] = {};
 
-      const next = document.createElement("p");
-      next.setAttribute("class", "next");
+  bjImgObj[bjName] = bjImg;
+  bjNicknameObj[bjName] = bjNickname;
 
-      const nextIcon = document.createElement("img");
-      nextIcon.setAttribute("src", "./img/right.svg");
-      nextIcon.setAttribute("alt", "mext");
+  calendarList.innerHTML = "";
+  for (const e of Object.keys(plan)) {
+    const bjCalendar = document.createElement("div");
+    bjCalendar.setAttribute("class", "bjCalendar");
 
-      next.appendChild(nextIcon);
-      bjCalendar.appendChild(name);
-      bjCalendar.appendChild(next);
-      calendarList.appendChild(bjCalendar);
+    const bjProfileImg = document.createElement("img");
+    bjProfileImg.setAttribute("class", "bjimg");
+    bjProfileImg.setAttribute("src", bjImgObj[e]);
+    bjProfileImg.setAttribute("alt", "bjImg");
 
-      bjCalendar.onclick = () => {
-        document.getElementById("slider").style.transform = "translate(-100vw)";
-        document.getElementById("showMenu").style.display = "flex";
-        document.getElementById("backIcon").style.display = "flex";
-        selectedBj = e;
-        updateCalendar();
-      };
-    }
+    const info = document.createElement("div");
+    info.setAttribute("class", "info");
+
+    const name = document.createElement("p");
+    name.setAttribute("class", "bjName");
+    name.innerText = bjNicknameObj[e];
+
+    const next = document.createElement("p");
+    next.setAttribute("class", "next");
+
+    const nextIcon = document.createElement("img");
+    nextIcon.setAttribute("src", "./img/right.svg");
+    nextIcon.setAttribute("alt", "mext");
+
+    next.appendChild(nextIcon);
+    bjCalendar.appendChild(bjProfileImg);
+    info.appendChild(name);
+    info.appendChild(next);
+    bjCalendar.appendChild(info);
+    calendarList.appendChild(bjCalendar);
+
+    bjCalendar.onclick = () => {
+      document.getElementById("slider").style.transform = "translate(-100vw)";
+      document.getElementById("showMenu").style.display = "flex";
+      document.getElementById("backIcon").style.display = "flex";
+      selectedBj = e;
+      document.getElementsByClassName("headerTitle").item(0).innerText =
+        bjNicknameObj[e] + "님의 Calendar";
+      updateCalendar();
+    };
   }
 };
 
@@ -336,8 +406,7 @@ const getDurationType = (e) => {
 
 const removeCalendar = () => {
   delete plan[selectedBj];
-  let plandata = JSON.stringify(plan);
-  localStorage.setItem("afreecaCalendar", plandata);
+  savePlan();
   document.getElementById("slider").style.transform = "translate(0vw)";
   document.getElementById("showMenu").style.display = "none";
   document.getElementById("backIcon").style.display = "none";
@@ -349,8 +418,7 @@ const removeCalendar = () => {
 
 const removeDayPlan = () => {
   delete plan[selectedBj][startDate.toISOString().split("T")[0]];
-  let plandata = JSON.stringify(plan);
-  localStorage.setItem("afreecaCalendar", plandata);
+  savePlan();
   alert("삭제되었습니다");
   updateCalendar();
 };
@@ -368,7 +436,11 @@ const africaSdkInit = () => {
     isBJ = auth.isBJ;
     broadInfo = broad;
     playerInfo = player;
-    bjName = broad.bjNickname;
+    bjName = broad.bjId;
+    bjNickname = broad.bjNickname;
+    bjImg = broad.bjThumbnail;
+    console.log(broad);
+    loadPlan();
   };
 
   extensionSdk.handleInitialization(init);
@@ -424,6 +496,8 @@ const attachEvent = () => {
     document.getElementById("slider").style.transform = "translate(0vw)";
     document.getElementById("showMenu").style.display = "none";
     document.getElementById("backIcon").style.display = "none";
+    document.getElementsByClassName("headerTitle").item(0).innerText =
+      "afreecatv calendar";
     selectedBj = null;
   });
 
@@ -463,28 +537,26 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-  let a = {
-    홍기범: {
-      "2023-11-21": {
-        type: "가나다와 합방",
-        startTime: "22:00",
-        content: "누구누구와 합방합니다.",
-        background: "#000000",
-      },
-      "2023-11-22": {
-        type: "합방",
-        startTime: "22:00",
-        content: "누구누구와 합방합니다.",
-        background: "#000000",
-      },
-    },
-  };
+  // let a = {
+  //   홍기범: {
+  //     "2023-11-21": {
+  //       type: "가나다와 합방",
+  //       startTime: "22:00",
+  //       content: "누구누구와 합방합니다.",
+  //       background: "#000000",
+  //     },
+  //     "2023-11-22": {
+  //       type: "합방",
+  //       startTime: "22:00",
+  //       content: "누구누구와 합방합니다.",
+  //       background: "#000000",
+  //     },
+  //   },
+  // };
 
-  localStorage.setItem("afreecaCalendar", JSON.stringify(a));
+  // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   setDuration(startDate.getDate());
   africaSdkInit();
-  loadPlan();
   attachEvent();
   updateCalendar();
-  console.log(plan);
 };
