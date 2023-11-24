@@ -553,6 +553,7 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
+  document.getElementById("slider").style.transform = "translate(-100vw)";
   setDuration(startDate.getDate());
   africaSdkInit();
   attachEvent();
