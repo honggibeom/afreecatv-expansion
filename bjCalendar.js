@@ -76,6 +76,16 @@ const coustomAlert = (message) => {
   document.getElementsByTagName("body").item(0).appendChild(popup);
   document.getElementsByTagName("body").item(0).appendChild(popupBack);
 
+  popup.style.transition = "0.7s";
+  popup.style.opacity = 1;
+  popupBack.style.transition = "0.7s";
+  popupBack.style.opacity = 1;
+
+  setTimeout(() => {
+    document.getElementById("popup").style.opacity = 0;
+    document.getElementById("popupBack").style.opacity = 0;
+  }, 800);
+
   setTimeout(() => {
     document.getElementById("popup").remove();
     document.getElementById("popupBack").remove();
@@ -157,8 +167,9 @@ const loadSelectedDateInfo = (selectedDate) => {
       "block";
     document.getElementsByClassName("deleteBtn").item(0).style.display =
       "block";
-    document.getElementById('time').style.display = "block";
-    document.getElementById('noTime').style.display = "none";
+    document.getElementById("time").style.display = "block";
+    document.getElementById("noTime").style.display = "none";
+    document.getElementById("showTime").style.display = "none";
 
     if (
       plan[selectedBj] &&
@@ -248,8 +259,8 @@ const loadSelectedDateInfo = (selectedDate) => {
     document.getElementsByClassName("detailColor").item(0).style.display =
       "none";
     document.getElementsByClassName("deleteBtn").item(0).style.display = "none";
-    document.getElementById('time').style.display = "block";
-    document.getElementById('noTime').style.display = "none";
+    document.getElementById("time").style.display = "none";
+    document.getElementById("noTime").style.display = "none";
 
     if (
       plan[selectedBj] &&
@@ -288,11 +299,16 @@ const loadSelectedDateInfo = (selectedDate) => {
       document.getElementById("ampm").value = ampm;
       document.getElementById("hour").value = hour;
       document.getElementById("minute").value = minute;
+
+      const showTime = ((ampm === "PM") ? "오후 " : "오전 ") + hour + "시 " + minute + "분";
+      document.getElementById("showTime").style.display = "block";
+      document.getElementById("showTime").innerText = showTime;
     } else {
       document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
       document.getElementById("detailTextarea").value = "방송 설명이 없습니다.";
-      document.getElementById('time').style.display = "none";
-      document.getElementById('noTime').style.display = "block";
+      document.getElementById("time").style.display = "none";
+      document.getElementById("noTime").style.display = "block";
+      document.getElementById("showTime").style.display = "none";
     }
   }
 };
