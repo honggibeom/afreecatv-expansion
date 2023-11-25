@@ -143,7 +143,7 @@ body {
 .deleteBjCalendar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   width: 25%;
   margin: 7px 0;
 }
@@ -240,33 +240,45 @@ input[type="text"] {
   width: 95%;
   height: 27px;
   font-size: 13px;
-  border: 0;
-  border-radius: 15px;
-  outline: none;
+  border: 1px solid gray;
+  border-radius: 6px;
   padding-left: 10px;
-  background-color: rgb(233, 233, 233);
+}
+
+input[type="text"]:focus {
+  outline: 0;
+  border: 1px solid #4279ff;
+  border-radius: 6px;
 }
 
 input[type="time"] {
   width: 95%;
   height: 27px;
   font-size: 13px;
-  border: 0;
-  border-radius: 15px;
-  outline: none;
+  border: 1px solid gray;
+  border-radius: 6px;
   padding-left: 10px;
-  background-color: rgb(233, 233, 233);
+}
+
+input[type="time"]:focus {
+  outline: 0;
+  border: 1px solid #4279ff;
+  border-radius: 6px;
 }
 
 textarea {
   width: 95%;
   height: 120px;
   font-size: 13px;
-  border: 0;
-  border-radius: 15px;
-  outline: none;
+  border: 1px solid gray;
+  border-radius: 6px;
   padding-left: 10px;
-  background-color: rgb(233, 233, 233);
+}
+
+textarea:focus {
+  outline: 0;
+  border: 1px solid #4279ff;
+  border-radius: 6px;
 }
 
 #categoryInput:disabled {
@@ -342,4 +354,51 @@ textarea:disabled {
   padding: 7px 10px;
   cursor: pointer;
   margin-right: 10px;
+}
+
+#popup {
+  position: fixed;
+  width: 80vw;
+  left: 10vw;
+  top: 40vh;
+  z-index: 3;
+  background-color: #ffffff;
+  border-radius: 4px;
+}
+
+#popupBack {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #00000088;
+  z-index: 2;
+}
+
+.popupMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.btnContainer {
+  border-top: 1px solid #00000066;
+  display: flex;
+}
+
+.confrimBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  font-size: 12px;
+  margin: 0;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.red {
+  border-left: 1px solid #00000066;
+  color: #981c26;
 }

@@ -1,5 +1,5 @@
-const SDK = window.AFREECA.ext;
-const extensionSdk = SDK();
+let SDK;
+let extensionSdk;
 let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
 let startDate = new Date();
@@ -16,6 +16,70 @@ let bjImgObj = {};
 let bjNicknameObj = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
+
+const coustomConfrim = (message, exec) => {
+  let popupBack = document.createElement("div");
+  popupBack.setAttribute("id", "popupBack");
+  let popup = document.createElement("div");
+  popup.setAttribute("id", "popup");
+
+  let popupMessage = document.createElement("p");
+  popupMessage.setAttribute("class", "popupMessage");
+  popupMessage.innerText = message;
+
+  let btn = document.createElement("div");
+  btn.setAttribute("class", "btnContainer");
+  let canclebtn = document.createElement("p");
+  let confrimbtn = document.createElement("p");
+  canclebtn.setAttribute("class", "confrimBtn red");
+  confrimbtn.setAttribute("class", "confrimBtn");
+  confrimbtn.innerText = "확인";
+  canclebtn.innerText = "취소";
+
+  confrimbtn.onclick = () => {
+    exec();
+    document.getElementById("popup").remove();
+    document.getElementById("popupBack").remove();
+  };
+
+  canclebtn.onclick = () => {
+    document.getElementById("popup").remove();
+    document.getElementById("popupBack").remove();
+  };
+
+  popupBack.onclick = () => {
+    document.getElementById("popup").remove();
+    document.getElementById("popupBack").remove();
+  };
+
+  btn.appendChild(confrimbtn);
+  btn.appendChild(canclebtn);
+  popup.appendChild(popupMessage);
+  popup.appendChild(btn);
+  document.getElementsByTagName("body").item(0).appendChild(popup);
+  document.getElementsByTagName("body").item(0).appendChild(popupBack);
+};
+
+const coustomAlert = (message) => {
+  let popupBack = document.createElement("div");
+  popupBack.setAttribute("id", "popupBack");
+  let popup = document.createElement("div");
+  popup.setAttribute("id", "popup");
+
+  let popupMessage = document.createElement("p");
+  popupMessage.setAttribute("class", "popupMessage");
+  popupMessage.innerText = message;
+
+  popup.appendChild(popupMessage);
+
+  document.getElementsByTagName("body").item(0).appendChild(popup);
+  document.getElementsByTagName("body").item(0).appendChild(popupBack);
+
+  setTimeout(() => {
+    document.getElementById("popup").remove();
+    document.getElementById("popupBack").remove();
+  }, 1500);
+};
 
 const getDateNum = () => {
   let tmp = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28;
@@ -118,9 +182,9 @@ const loadSelectedDateInfo = (selectedDate) => {
             : e.style.backgroundColor;
         colorList[tmp_color] = idx;
         idx++;
-        e.style.border = "2px solid " + tmp_color;
+        e.style.border = "3px solid " + tmp_color;
       }
-      colorButtons[colorList[selectedColor]].style.border = "2px solid #000000";
+      colorButtons[colorList[selectedColor]].style.border = "3px solid #000000";
     } else {
       document.getElementById("categoryInput").value = "";
       document.getElementById("detailTextarea").value = "";
@@ -131,9 +195,9 @@ const loadSelectedDateInfo = (selectedDate) => {
           e.style.backgroundColor === "white"
             ? "white"
             : e.style.backgroundColor;
-        e.style.border = "2px solid " + tmp_color;
+        e.style.border = "3px solid " + tmp_color;
       }
-      colorButtons[0].style.border = "2px solid #000000";
+      colorButtons[0].style.border = "3px solid #000000";
     }
   } else {
     // 본인이 아닐 경우
@@ -413,6 +477,8 @@ const removeDayPlan = () => {
 };
 
 const africaSdkInit = () => {
+  SDK = window.AFREECA.ext;
+  extensionSdk = SDK();
   let isLoggedIn = false;
   let broadInfo = null; // 방송 정보
   let playerInfo = null; // 플레이어 상태 정보
@@ -495,7 +561,7 @@ const attachEvent = () => {
   for (const e of colorButtons) {
     let tmp_color =
       e.style.backgroundColor === "white" ? "white" : e.style.backgroundColor;
-    e.style.border = "2px solid " + tmp_color;
+    e.style.border = "3px solid " + tmp_color;
 
     e.onclick = (event) => {
       const colorButtons = document.querySelectorAll(".circleBtn");
@@ -503,8 +569,8 @@ const attachEvent = () => {
         let tmp_color =
           e.style.backgroundColor === "" ? "white" : e.style.backgroundColor;
         if (event.target.style.backgroundColor === tmp_color)
-          e.style.border = "2px solid #000000";
-        else e.style.border = "2px solid " + tmp_color;
+          e.style.border = "3px solid #000000";
+        else e.style.border = "3px solid " + tmp_color;
       }
       selectedColor = event.target.style.backgroundColor;
     };
