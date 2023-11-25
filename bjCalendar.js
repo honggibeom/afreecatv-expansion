@@ -148,7 +148,9 @@ const loadSelectedDateInfo = (selectedDate) => {
     // 본인일 경우
     document.getElementById("categoryInput").disabled = false;
     document.getElementById("detailTextarea").disabled = false;
-    document.querySelector('input[type="time"]').disabled = false;
+    document.getElementById("ampm").disabled = false;
+    document.getElementById("hour").disabled = false;
+    document.getElementById("minute").disabled = false;
 
     document.getElementsByClassName("saveBtn").item(0).style.display = "block";
     document.getElementsByClassName("detailColor").item(0).style.display =
@@ -166,8 +168,7 @@ const loadSelectedDateInfo = (selectedDate) => {
         selectedDayInfo.type || "";
       document.getElementById("detailTextarea").value =
         selectedDayInfo.content || "";
-      document.querySelector('input[type="time"]').value =
-        selectedDayInfo.startTime || "";
+      document.getElementById("time").value = selectedDayInfo.startTime || "";
 
       const selectedColor = selectedDayInfo.background || "";
       const colorButtons = document.querySelectorAll(".circleBtn");
@@ -189,7 +190,7 @@ const loadSelectedDateInfo = (selectedDate) => {
     } else {
       document.getElementById("categoryInput").value = "";
       document.getElementById("detailTextarea").value = "";
-      document.querySelector('input[type="time"]').value = "";
+      document.getElementById("time").value = "";
       const colorButtons = document.querySelectorAll(".circleBtn");
       for (const e of colorButtons) {
         let tmp_color =
@@ -204,7 +205,10 @@ const loadSelectedDateInfo = (selectedDate) => {
     // 본인이 아닐 경우
     document.getElementById("categoryInput").disabled = true;
     document.getElementById("detailTextarea").disabled = true;
-    document.querySelector('input[type="time"]').disabled = true;
+    document.getElementById("ampm").disabled = true;
+    document.getElementById("hour").disabled = true;
+    document.getElementById("minute").disabled = true;
+
     document.getElementsByClassName("saveBtn").item(0).style.display = "none";
     document.getElementsByClassName("detailColor").item(0).style.display =
       "none";
@@ -221,14 +225,12 @@ const loadSelectedDateInfo = (selectedDate) => {
         selectedDayInfo.type || "";
       document.getElementById("detailTextarea").value =
         selectedDayInfo.content || "";
-      document.querySelector('input[type="time"]').value =
-        selectedDayInfo.startTime || "";
+      document.getElementById("time").value = selectedDayInfo.startTime || "";
     } else {
       document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
       document.getElementById("detailTextarea").value =
         "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
-      document.querySelector('input[type="time"]').value =
-        "방송 시작 시간이 없습니다.";
+      document.getElementById("time").value = "방송 시작 시간이 없습니다.";
     }
   }
 };
@@ -645,7 +647,14 @@ const attachEvent = () => {
 
     const categoryInput = document.getElementById("categoryInput").value;
     const detailTextarea = document.getElementById("detailTextarea").value;
-    const startTime = document.querySelector('input[type="time"]').value;
+    const ampm = document.getElementById("ampm").value;
+    const hour = document.getElementById("hour").value;
+    const minute = document.getElementById("minute").value;
+
+    console.log(ampm);
+    console.log(hour);
+    console.log(minute);
+    //const startTime = document.getElementById("time").value;
 
     plan[selectedBj][currentDate].type = categoryInput;
     plan[selectedBj][currentDate].content = detailTextarea;

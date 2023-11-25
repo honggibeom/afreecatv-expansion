@@ -252,8 +252,8 @@ input[type="text"]:focus {
   border-radius: 6px;
 }
 
-input[type="time"] {
-  width: 95%;
+#ampm {
+  width: 70px;
   height: 27px;
   font-size: 13px;
   border: 1px solid gray;
@@ -261,10 +261,50 @@ input[type="time"] {
   padding-left: 10px;
 }
 
-input[type="time"]:focus {
+#ampm:focus {
   outline: 0;
   border: 1px solid #4279ff;
   border-radius: 6px;
+}
+
+#hour {
+  width: 40px;
+  height: 24px;
+  font-size: 13px;
+  border: 1px solid gray;
+  border-radius: 6px;
+  padding-left: 10px;
+}
+
+#hour:focus {
+  outline: 0;
+  border: 1px solid #4279ff;
+  border-radius: 6px;
+}
+
+#hourLabel {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#minute {
+  width: 40px;
+  height: 24px;
+  font-size: 13px;
+  border: 1px solid gray;
+  border-radius: 6px;
+  padding-left: 10px;
+}
+
+#minute:focus {
+  outline: 0;
+  border: 1px solid #4279ff;
+  border-radius: 6px;
+}
+
+#minuteLabel {
+  font-size: 13px;
+  font-weight: 600;
 }
 
 textarea {
@@ -292,7 +332,38 @@ textarea:focus {
   padding-left: initial;
 }
 
-input[type="time"]:disabled {
+#ampm:disabled {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  padding: 0;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
+}
+
+#ampmOption:disabled {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  padding: 0;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
+}
+
+#hour:disabled {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  padding: 0;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
+  text-align: right;
+}
+
+#minute:disabled {
   background: #fff;
   color: #000;
   font-size: 15px;
