@@ -1,7 +1,9 @@
+const SDK = window.AFREECA.ext;
+const extensionSdk = SDK();
 let year = new Date().getFullYear();
 let month = new Date().getMonth() + 1;
 let startDate = new Date();
-let isBJ = true;
+let isBJ = false;
 
 let bjName = null;
 let bjNickname = null;
@@ -77,58 +79,18 @@ const loadSelectedDateInfo = (selectedDate) => {
   let tmp_day = String(selectedDate).padStart(2, "0");
   const currentDate = year + "-" + month + "-" + tmp_day;
 
-  if (false) {
-    // 본인이 아닐 경우
-    document.getElementById("categoryInput").disabled = true;
-    document.getElementById("detailTextarea").disabled = true;
-    document.querySelector('input[type="time"]').disabled = true;
-
-    // 저장 버튼 삭제
-    let saveBtn = document.getElementsByClassName("saveBtn");
-    while (saveBtn.length > 0) {
-      saveBtn[0].parentNode.removeChild(saveBtn[0]);
-    }
-
-    // 배경색 삭제
-    let detailColor = document.getElementsByClassName("detailColor");
-    while (detailColor.length > 0) {
-      detailColor[0].parentNode.removeChild(detailColor[0]);
-    }
-
-    // 시청자와의 공유 버튼 삭제
-    let menu = document.getElementsByClassName("menu");
-    while (menu.length > 0) {
-      menu[0].parentNode.removeChild(menu[0]);
-    }
-
-    // 선택된 날짜 삭제 버튼 삭제
-    let deleteBtn = document.getElementsByClassName("deleteBtn");
-    while (deleteBtn.length > 0) {
-      deleteBtn[0].parentNode.removeChild(deleteBtn[0]);
-    }
-
-    if (
-      plan[selectedBj] &&
-      plan[selectedBj][currentDate] !== undefined &&
-      plan[selectedBj][currentDate] !== null
-    ) {
-      const selectedDayInfo = plan[selectedBj][currentDate];
-
-      document.getElementById("categoryInput").value =
-        selectedDayInfo.type || "";
-      document.getElementById("detailTextarea").value =
-        selectedDayInfo.content || "";
-      document.querySelector('input[type="time"]').value =
-        selectedDayInfo.startTime || "";
-    } else {
-      document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
-      document.getElementById("detailTextarea").value =
-        "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
-      document.querySelector('input[type="time"]').value =
-        "방송 시작 시간이 없습니다.";
-    }
-  } else {
+  if (isBJ && selectedBj === bjName) {
     // 본인일 경우
+    document.getElementById("categoryInput").disabled = false;
+    document.getElementById("detailTextarea").disabled = false;
+    document.querySelector('input[type="time"]').disabled = false;
+
+    document.getElementsByClassName("saveBtn").item(0).style.display = "block";
+    document.getElementsByClassName("detailColor").item(0).style.display =
+      "block";
+    document.getElementsByClassName("deleteBtn").item(0).style.display =
+      "block";
+
     if (
       plan[selectedBj] &&
       plan[selectedBj][currentDate] !== undefined &&
@@ -172,6 +134,36 @@ const loadSelectedDateInfo = (selectedDate) => {
         e.style.border = "2px solid " + tmp_color;
       }
       colorButtons[0].style.border = "2px solid #000000";
+    }
+  } else {
+    // 본인이 아닐 경우
+    document.getElementById("categoryInput").disabled = true;
+    document.getElementById("detailTextarea").disabled = true;
+    document.querySelector('input[type="time"]').disabled = true;
+    document.getElementsByClassName("saveBtn").item(0).style.display = "none";
+    document.getElementsByClassName("detailColor").item(0).style.display =
+      "none";
+    document.getElementsByClassName("deleteBtn").item(0).style.display = "none";
+
+    if (
+      plan[selectedBj] &&
+      plan[selectedBj][currentDate] !== undefined &&
+      plan[selectedBj][currentDate] !== null
+    ) {
+      const selectedDayInfo = plan[selectedBj][currentDate];
+
+      document.getElementById("categoryInput").value =
+        selectedDayInfo.type || "";
+      document.getElementById("detailTextarea").value =
+        selectedDayInfo.content || "";
+      document.querySelector('input[type="time"]').value =
+        selectedDayInfo.startTime || "";
+    } else {
+      document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
+      document.getElementById("detailTextarea").value =
+        "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
+      document.querySelector('input[type="time"]').value =
+        "방송 시작 시간이 없습니다.";
     }
   }
 };
@@ -315,12 +307,12 @@ const loadPlan = () => {
   //   bjImgObj: {},
   //   bjNicknameObj: {},
   // };
-
   // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   // 리스트 초기화 -> 중복 호출 시 기존 리스트를 초기화 하고 다시 렌더링 되도록
   const calendarList = document.getElementById("calendarList");
-  let plandata = JSON.parse(localStorage.getItem("afreecaCalendar"));
 
+  let plandata = JSON.parse(localStorage.getItem("afreecaCalendar"));
+  console.log(plandata);
   if (plandata !== undefined && plandata !== null) {
     plan = plandata.plan;
     bjImgObj = plandata.bjImgObj;
@@ -336,16 +328,15 @@ const loadPlan = () => {
 
   bjImgObj[bjName] = bjImg;
   bjNicknameObj[bjName] = bjNickname;
-
-  //calendarList.innerHTML = "";
+  calendarList.innerHTML = "";
   for (const e of Object.keys(plan)) {
     const bjCalendar = document.createElement("div");
     bjCalendar.setAttribute("class", "bjCalendar");
-
     const bjProfileImg = document.createElement("img");
     bjProfileImg.setAttribute("class", "bjimg");
-    bjProfileImg.setAttribute("src", bjImgObj[e]);
+    bjProfileImg.setAttribute("src", "#");
     bjProfileImg.setAttribute("alt", "bjImg");
+    bjProfileImg.setAttribute("loading", "lazy");
     bjProfileImg.onerror = (e) => {
       e.target.src = "./img/afreecaImg.gif";
     };
@@ -422,9 +413,6 @@ const removeDayPlan = () => {
 };
 
 const africaSdkInit = () => {
-  const SDK = window.AFREECA.ext;
-  const extensionSdk = SDK();
-
   let isLoggedIn = false;
   let broadInfo = null; // 방송 정보
   let playerInfo = null; // 플레이어 상태 정보
@@ -553,7 +541,6 @@ const updateCalendar = () => {
 };
 
 window.onload = () => {
-  document.getElementById("slider").style.transform = "translate(-100vw)";
   setDuration(startDate.getDate());
   africaSdkInit();
   attachEvent();

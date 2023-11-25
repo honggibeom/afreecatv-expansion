@@ -96,11 +96,27 @@ body {
   justify-content: space-between;
   gap: calc(33.333vw - 144px);
 }
+
 .bjCalendar:nth-child(2n + 1) {
   margin: 5px 0 5px calc(33.333vw - 144px);
 }
 .bjCalendar:nth-child(2n) {
   margin: 5px calc(33.333vw - 144px) 5px 0;
+}
+
+@media (max-width: 450px) {
+  #calendarList {
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .bjCalendar:nth-child(2n + 1) {
+    margin: 10px auto;
+  }
+  .bjCalendar:nth-child(2n) {
+    margin: 10px auto;
+  }
 }
 .bjCalendar {
   width: 216px;
@@ -287,6 +303,7 @@ textarea:disabled {
 .colorButtons {
   display: flex;
   cursor: pointer;
+  flex-wrap: wrap;
 }
 
 .circleBtn {
@@ -296,6 +313,7 @@ textarea:disabled {
   border-radius: 50%;
   background-color: white;
   margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 .btnControl {
