@@ -432,30 +432,6 @@ const savePlan = () => {
 };
 
 const loadPlan = () => {
-  // let a = {
-  //   plan: {
-  //     홍기범: {
-  //       "2023-11-21": {
-  //         type: "가나다와 합방",
-  //         startTime: "22:00",
-  //         content: "누구누구와 합방합니다.",
-  //         background: "#000000",
-  //       },
-  //       "2023-11-22": {
-  //         type: "합방",
-  //         startTime: "22:00",
-  //         content: "누구누구와 합방합니다.",
-  //         background: "#000000",
-  //       },
-  //     },
-  //   },
-
-  //   bjImgObj: {},
-  //   bjNicknameObj: {},
-  // };
-  // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
-  // 리스트 초기화 -> 중복 호출 시 기존 리스트를 초기화 하고 다시 렌더링 되도록
-
   const calendarList = document.getElementById("calendarList");
 
   let plandata = JSON.parse(localStorage.getItem("afreecaCalendar"));
