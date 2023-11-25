@@ -253,7 +253,7 @@ input[type="text"]:focus {
 }
 
 #ampm {
-  width: 70px;
+  width: 60px;
   height: 27px;
   font-size: 13px;
   border: 1px solid gray;
@@ -268,7 +268,7 @@ input[type="text"]:focus {
 }
 
 #hour {
-  width: 40px;
+  width: 35px;
   height: 24px;
   font-size: 13px;
   border: 1px solid gray;
@@ -283,12 +283,11 @@ input[type="text"]:focus {
 }
 
 #hourLabel {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
 }
 
 #minute {
-  width: 40px;
+  width: 35px;
   height: 24px;
   font-size: 13px;
   border: 1px solid gray;
@@ -303,8 +302,7 @@ input[type="text"]:focus {
 }
 
 #minuteLabel {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
 }
 
 textarea {
@@ -320,6 +318,17 @@ textarea:focus {
   outline: 0;
   border: 1px solid #4279ff;
   border-radius: 6px;
+}
+
+#noTime {
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  border-radius: 0;
+  padding: 0;
+  border: initial;
+  outline: initial;
+  padding-left: initial;
 }
 
 #categoryInput:disabled {

@@ -157,6 +157,8 @@ const loadSelectedDateInfo = (selectedDate) => {
       "block";
     document.getElementsByClassName("deleteBtn").item(0).style.display =
       "block";
+    document.getElementById('time').style.display = "block";
+    document.getElementById('noTime').style.display = "none";
 
     if (
       plan[selectedBj] &&
@@ -245,6 +247,8 @@ const loadSelectedDateInfo = (selectedDate) => {
     document.getElementsByClassName("detailColor").item(0).style.display =
       "none";
     document.getElementsByClassName("deleteBtn").item(0).style.display = "none";
+    document.getElementById('time').style.display = "block";
+    document.getElementById('noTime').style.display = "none";
 
     if (
       plan[selectedBj] &&
@@ -284,11 +288,9 @@ const loadSelectedDateInfo = (selectedDate) => {
       document.getElementById("minute").value = minute;
     } else {
       document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
-      document.getElementById("detailTextarea").value =
-        "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
-        document.getElementById("ampm").value = "";
-        document.getElementById("hour").value = "";
-        document.getElementById("minute").value = "";
+      document.getElementById("detailTextarea").value = "방송 설명이 없습니다.";
+      document.getElementById('time').style.display = "none";
+      document.getElementById('noTime').style.display = "block";
     }
   }
 };
@@ -590,7 +592,7 @@ const africaSdkInit = () => {
       tmp_data["bjNicknameObj"][bjName] = bjnickname_tmp;
       let stringData = JSON.stringify(jsonPlan);
       extensionSdk.broadcast.send("responseBjCalendar", stringData);
-      coustomAlert("시청자와 공유 되었습니다");
+      coustomAlert("시청자와 공유되었습니다");
     } else {
       extensionSdk.broadcast.send("noDataBjCalendar", "nothing");
       coustomAlert("저장된 캘린더가 없습니다");
@@ -739,9 +741,6 @@ const attachEvent = () => {
     const hourString = adjustedHour.toString().padStart(2, "0");
     const minuteString = minute.toString().padStart(2, "0");
 
-    // console.log(ampm);
-    // console.log(hourString);
-    // console.log(minuteString);
     const startTime = hourString + ":" + minuteString;
     const categoryInput = document.getElementById("categoryInput").value;
     const detailTextarea = document.getElementById("detailTextarea").value;
@@ -753,6 +752,7 @@ const attachEvent = () => {
 
     savePlan();
     selectedColor = "";
+    coustomAlert("저장되었습니다");
   });
 
   // 삭제 버튼 클릭 시 해당 날짜 일정 삭제
