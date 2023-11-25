@@ -17,7 +17,7 @@ let bjNicknameObj = {};
 
 const day = ["월", "화", "수", "목", "금", "토", "일"];
 
-const coustomConfrim = (message, exec) => {
+const coustomConfrim = (message, exec, bj) => {
   let popupBack = document.createElement("div");
   popupBack.setAttribute("id", "popupBack");
   let popup = document.createElement("div");
@@ -37,7 +37,8 @@ const coustomConfrim = (message, exec) => {
   canclebtn.innerText = "취소";
 
   confrimbtn.onclick = () => {
-    exec();
+    if (bj === undefined) exec();
+    else exec(bj);
     document.getElementById("popup").remove();
     document.getElementById("popupBack").remove();
   };
@@ -373,10 +374,10 @@ const loadPlan = () => {
   // };
   // localStorage.setItem("afreecaCalendar", JSON.stringify(a));
   // 리스트 초기화 -> 중복 호출 시 기존 리스트를 초기화 하고 다시 렌더링 되도록
+
   const calendarList = document.getElementById("calendarList");
 
   let plandata = JSON.parse(localStorage.getItem("afreecaCalendar"));
-  console.log(plandata);
   if (plandata !== undefined && plandata !== null) {
     plan = plandata.plan;
     bjImgObj = plandata.bjImgObj;
@@ -417,17 +418,17 @@ const loadPlan = () => {
 
     const nextIcon = document.createElement("img");
     nextIcon.setAttribute("src", "./img/close.svg");
-    nextIcon.setAttribute("alt", "mext");
+    nextIcon.setAttribute("alt", "delete");
 
-    next.appendChild(nextIcon);
-    info.appendChild(name);
-    info.appendChild(next);
-    bjCalendar.appendChild(info);
-    bjCalendar.appendChild(bjProfileImg);
+    next.onclick = () => {
+      coustomConfrim(
+        bjNicknameObj[e] + "님의 캘린더를 삭제하시겠습니까?",
+        removeCalendar,
+        e
+      );
+    };
 
-    calendarList.appendChild(bjCalendar);
-
-    bjCalendar.onclick = () => {
+    name.onclick = () => {
       document.getElementById("slider").style.transform = "translate(-100vw)";
       if (e == bjName) document.getElementById("share").style.display = "flex";
       document.getElementById("backIcon").style.display = "flex";
@@ -437,6 +438,25 @@ const loadPlan = () => {
       updateCalendar();
       loadSelectedDateInfo(startDate.getDate());
     };
+
+    bjProfileImg.onclick = () => {
+      document.getElementById("slider").style.transform = "translate(-100vw)";
+      if (e == bjName) document.getElementById("share").style.display = "flex";
+      document.getElementById("backIcon").style.display = "flex";
+      selectedBj = e;
+      document.getElementsByClassName("headerTitle").item(0).innerText =
+        bjNicknameObj[e] + "님의 Calendar";
+      updateCalendar();
+      loadSelectedDateInfo(startDate.getDate());
+    };
+
+    next.appendChild(nextIcon);
+    info.appendChild(name);
+    info.appendChild(next);
+    bjCalendar.appendChild(info);
+    bjCalendar.appendChild(bjProfileImg);
+
+    calendarList.appendChild(bjCalendar);
   }
   const bottom = document.createElement("P");
   bottom.setAttribute("class", "bottom");
@@ -457,15 +477,15 @@ const getDurationType = (e) => {
 };
 
 // 특정 bj 캘린더 삭제
-const removeCalendar = () => {
-  delete plan[selectedBj];
+const removeCalendar = (bj) => {
+  delete plan[bj];
   savePlan();
-  document.getElementById("slider").style.transform = "translate(0vw)";
   document.getElementById("share").style.display = "none";
   document.getElementById("backIcon").style.display = "none";
   selectedBj = null;
-  updateCalendar();
   loadPlan();
+  updateCalendar();
+  coustomAlert("삭제되었습니다");
 };
 
 // 특정 날짜의 일정 삭제
@@ -474,6 +494,7 @@ const removeDayPlan = () => {
   savePlan();
   updateCalendar();
   setDuration(startDate.getDate());
+  coustomAlert("삭제되었습니다");
 };
 
 const africaSdkInit = () => {
@@ -482,6 +503,39 @@ const africaSdkInit = () => {
   let isLoggedIn = false;
   let broadInfo = null; // 방송 정보
   let playerInfo = null; // 플레이어 상태 정보
+
+  const sendCalendar = () => {
+    let plandata = localStorage.getItem("afreecaCalendar");
+    if (plandata !== undefined && plandata !== null) {
+      let jsonPlan = JSON.parse(plandata);
+      let tmp_data = {
+        plan: {},
+        bjImgObj: {},
+        bjNicknameObj: {},
+      };
+      let plan_tmp =
+        jsonPlan["plan"][bjName] === undefined ? {} : jsonPlan["plan"][bjName];
+
+      let bjimg_tmp =
+        jsonPlan["bjImgObj"][bjName] === undefined
+          ? "#"
+          : jsonPlan["bjImgObj"][bjName];
+
+      let bjnickname_tmp =
+        jsonPlan["bjNicknameObj"][bjName] === undefined
+          ? "닉네임 없음"
+          : jsonPlan["bjNicknameObj"][bjName];
+      tmp_data["plan"][bjName] = plan_tmp;
+      tmp_data["bjImgObj"][bjName] = bjimg_tmp;
+      tmp_data["bjNicknameObj"][bjName] = bjnickname_tmp;
+      let stringData = JSON.stringify(jsonPlan);
+      extensionSdk.broadcast.send("responseBjCalendar", stringData);
+      coustomAlert("시청자와 공유 되었습니다");
+    } else {
+      extensionSdk.broadcast.send("noDataBjCalendar", "nothing");
+      coustomAlert("저장된 캘린더가 없습니다");
+    }
+  };
 
   const init = (auth, broad, player) => {
     isLoggedIn = !!auth.obscureUserId;
@@ -492,50 +546,57 @@ const africaSdkInit = () => {
     bjNickname = broad.bjNickname;
     bjImg = broad.bjThumbnail;
     loadPlan();
+    const share = document.getElementById("shareIcon");
+    const reload = document.getElementById("reloadIcon");
+
+    share.onclick = () => {
+      sendCalendar();
+    };
+
+    reload.onclick = () => {
+      extensionSdk.broadcast.send("requestBjCalendar", "request");
+    };
   };
 
   extensionSdk.handleInitialization(init);
 
-  const handleAuthorized = (data) => {
-    const { accessToken, userAgreeToken, obscureUserId, isBJ } = data;
-    isLoggedIn = !!obscureUserId;
-
-    if (isLoggedIn) {
-    } else {
-      renderError("로그인을 해주세요.");
-    }
-  };
-
-  extensionSdk.handleAuthorized(handleAuthorized);
-
   const handleBroadcastReceived = (action, message, fromId) => {
     if (action === "requestBjCalendar") {
-      let plandata = localStorage.getItem("afreecaCalendar");
-      if (plandata !== undefined && plandata !== null)
-        extensionSdk.broadcast.send("responseBjCalendar", plandata);
-      else extensionSdk.broadcast.send("noDataBjCalendar", "nothing");
-    }
-  };
+      sendCalendar();
+    } else if (action === "responseBjCalendar") {
+      let plandata = JSON.parse(message);
 
-  //user
-  const handleUserBroadcastReceived = (action, message, fromId) => {
-    if (action === "responseBjCalendar") {
-      let plandata = JSON.stringify(message);
       if (plandata !== undefined && plandata !== null) {
-        let afreecaTvCalendar = localStorage.getItem("afreecaTvCalendar");
-        if (afreecaTvCalendar === null || afreecaTvCalendar === undefined)
-          afreecaTvCalendar = {};
-        else afreecaTvCalendar = JSON.parse(afreecaTvCalendar);
-        afreecaTvCalendar[bjName] = plandata;
-        alert("연동이 완료되었습니다");
+        let afreecaCalendar = localStorage.getItem("afreecaCalendar");
+        if (afreecaCalendar === null || afreecaCalendar === undefined)
+          afreecaCalendar = { plan: {}, bjImgObj: {}, bjNicknameObj: {} };
+        else afreecaCalendar = JSON.parse(afreecaCalendar);
+
+        let tmp_data = { ...afreecaCalendar };
+
+        tmp_data["plan"][bjName] = {
+          ...tmp_data["plan"][bjName],
+          ...plandata["plan"][bjName],
+        };
+
+        tmp_data["bjImgObj"] = {
+          ...tmp_data["bjImgObj"],
+          ...plandata["bjImgObj"],
+        };
+
+        tmp_data["bjNicknameObj"] = {
+          ...tmp_data["bjNicknameObj"],
+          ...plandata["bjNicknameObj"],
+        };
+
+        localStorage.setItem("afreecaCalendar", JSON.stringify(tmp_data));
+        coustomAlert("연동이 완료되었습니다");
+        loadPlan();
+        updateCalendar();
       }
     } else if (action === "noDataBjCalendar") {
-      alert("데이터가 없습니다");
+      coustomAlert("데이터가 없습니다");
     }
-  };
-
-  const sendRequest = () => {
-    extensionSdk.broadcast.send("requestBjCalendar", "request");
   };
 
   extensionSdk.broadcast.listen(handleBroadcastReceived);
@@ -596,7 +657,9 @@ const attachEvent = () => {
   });
 
   // 삭제 버튼 클릭 시 해당 날짜 일정 삭제
-  document.querySelector(".deleteBtn").addEventListener("click", removeDayPlan);
+  document.querySelector(".deleteBtn").addEventListener("click", () => {
+    coustomConfrim("일정을 삭제하시겠습니까?", removeDayPlan);
+  });
 };
 
 const updateCalendar = () => {
@@ -604,6 +667,18 @@ const updateCalendar = () => {
   calendar.innerHTML = "";
   calendar.appendChild(makeHeader());
   calendar.appendChild(makeDate());
+  const share = document.getElementById("shareIcon");
+  const reload = document.getElementById("reloadIcon");
+  if (isBJ && bjName === selectedBj) {
+    share.style.display = "block";
+    reload.style.display = "none";
+  } else if (!isBJ && bjName === selectedBj) {
+    share.style.display = "none";
+    reload.style.display = "block";
+  } else {
+    share.style.display = "none";
+    reload.style.display = "none";
+  }
 };
 
 window.onload = () => {
