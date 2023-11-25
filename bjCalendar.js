@@ -163,13 +163,41 @@ const loadSelectedDateInfo = (selectedDate) => {
       plan[selectedBj][currentDate] !== undefined &&
       plan[selectedBj][currentDate] !== null
     ) {
+      // 현재 날짜에 지정된 방송 유형과 방송 설명 가져오기
       const selectedDayInfo = plan[selectedBj][currentDate];
       document.getElementById("categoryInput").value =
         selectedDayInfo.type || "";
       document.getElementById("detailTextarea").value =
         selectedDayInfo.content || "";
-      document.getElementById("time").value = selectedDayInfo.startTime || "";
 
+      // 현재 날짜에 지정된 방송 시간 가져오기
+      const startTime = selectedDayInfo.startTime || "";
+
+      let hour = 0;
+      let minute = 0;
+      let ampm = "";
+
+      if (startTime !== "") {
+        const timeParts = startTime.split(":");
+        hour = parseInt(timeParts[0]);
+        minute = parseInt(timeParts[1]);
+      
+        if (hour >= 12) { // 12 ~ 23시
+          ampm = "PM";
+          if (hour > 12) hour -= 12;
+        }
+        // 0 ~ 11시
+        else {
+          ampm = "AM";
+          if (hour === 0) hour += 12;
+        }
+      }
+      
+      document.getElementById("ampm").value = ampm;
+      document.getElementById("hour").value = hour;
+      document.getElementById("minute").value = minute;
+      
+      // 현재 날짜에 지정된 배경색 가져오기
       const selectedColor = selectedDayInfo.background || "";
       const colorButtons = document.querySelectorAll(".circleBtn");
 
@@ -188,9 +216,13 @@ const loadSelectedDateInfo = (selectedDate) => {
       }
       colorButtons[colorList[selectedColor]].style.border = "3px solid #000000";
     } else {
+      // 값이 없을 경우 전부 빈 값으로 초기화
       document.getElementById("categoryInput").value = "";
       document.getElementById("detailTextarea").value = "";
-      document.getElementById("time").value = "";
+      document.getElementById("ampm").value = "AM";
+      document.getElementById("hour").value = "12";
+      document.getElementById("minute").value = "00";
+
       const colorButtons = document.querySelectorAll(".circleBtn");
       for (const e of colorButtons) {
         let tmp_color =
@@ -225,12 +257,38 @@ const loadSelectedDateInfo = (selectedDate) => {
         selectedDayInfo.type || "";
       document.getElementById("detailTextarea").value =
         selectedDayInfo.content || "";
-      document.getElementById("time").value = selectedDayInfo.startTime || "";
+      
+      const startTime = selectedDayInfo.startTime || "";
+      let hour = 0;
+      let minute = 0;
+      let ampm = "";
+
+      if (startTime !== "") {
+        const timeParts = startTime.split(":");
+        hour = parseInt(timeParts[0]);
+        minute = parseInt(timeParts[1]);
+      
+        if (hour >= 12) { // 12 ~ 23시
+          ampm = "PM";
+          if (hour > 12) hour -= 12;
+        }
+        // 0 ~ 11시
+        else {
+          ampm = "AM";
+          if (hour === 0) hour += 12;
+        }
+      }
+      
+      document.getElementById("ampm").value = ampm;
+      document.getElementById("hour").value = hour;
+      document.getElementById("minute").value = minute;
     } else {
       document.getElementById("categoryInput").value = "방송 유형이 없습니다.";
       document.getElementById("detailTextarea").value =
         "방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.방송 설명이 없습니다.";
-      document.getElementById("time").value = "방송 시작 시간이 없습니다.";
+        document.getElementById("ampm").value = "";
+        document.getElementById("hour").value = "";
+        document.getElementById("minute").value = "";
     }
   }
 };
@@ -615,10 +673,32 @@ const attachEvent = () => {
     selectedBj = null;
   });
 
-  // 저장 버튼 클릭 시 해당 날짜 일정 저장
+  // 시간에 대한 max, min 값 조정
+  const hourInput = document.getElementById("hour");
+  const minuteInput = document.getElementById("minute");
+  
+  hourInput.addEventListener("change", () => {
+    const value = parseInt(hourInput.value);
+    if (value > parseInt(hourInput.max)) {
+      hourInput.value = hourInput.max; 
+    } else if (value < parseInt(hourInput.min)) {
+      hourInput.value = hourInput.min;
+    }
+  });
+
+  minuteInput.addEventListener("change", () => {
+    const value = parseInt(minuteInput.value);
+    if (value > parseInt(minuteInput.max)) {
+      minuteInput.value = minuteInput.max;
+    } else if (value < parseInt(minuteInput.min)) {
+      minuteInput.value = minuteInput.min;
+    }
+  });
+
   const saveButtons = document.querySelector(".saveBtn");
   let selectedColor = "";
 
+  // 배경색 설정
   const colorButtons = document.querySelectorAll(".circleBtn");
 
   for (const e of colorButtons) {
@@ -639,27 +719,37 @@ const attachEvent = () => {
     };
   }
 
+  // 저장 버튼 클릭 시 해당 날짜 일정 저장
   saveButtons.addEventListener("click", () => {
     const currentDate = startDate.toISOString().split("T")[0];
     if (!plan[selectedBj][currentDate]) {
       plan[selectedBj][currentDate] = {};
     }
 
+    const hour = parseInt(hourInput.value);
+    const minute = parseInt(minuteInput.value);
+    const ampm = document.getElementById("ampm").value;
+    let adjustedHour = 0;
+    if (ampm === "PM" && hour < 12) {
+      adjustedHour = hour + 12;
+    } else if (ampm === "AM" && hour === 12) {
+      adjustedHour = hour - 12;
+    } else adjustedHour = hour;
+    
+    const hourString = adjustedHour.toString().padStart(2, "0");
+    const minuteString = minute.toString().padStart(2, "0");
+
+    // console.log(ampm);
+    // console.log(hourString);
+    // console.log(minuteString);
+    const startTime = hourString + ":" + minuteString;
     const categoryInput = document.getElementById("categoryInput").value;
     const detailTextarea = document.getElementById("detailTextarea").value;
-    const ampm = document.getElementById("ampm").value;
-    const hour = document.getElementById("hour").value;
-    const minute = document.getElementById("minute").value;
-
-    console.log(ampm);
-    console.log(hour);
-    console.log(minute);
-    //const startTime = document.getElementById("time").value;
 
     plan[selectedBj][currentDate].type = categoryInput;
     plan[selectedBj][currentDate].content = detailTextarea;
-    plan[selectedBj][currentDate].startTime = startTime;
     plan[selectedBj][currentDate].background = selectedColor;
+    plan[selectedBj][currentDate].startTime = startTime;
 
     savePlan();
     selectedColor = "";
