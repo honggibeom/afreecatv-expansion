@@ -183,8 +183,9 @@ const loadSelectedDateInfo = (selectedDate) => {
         const timeParts = startTime.split(":");
         hour = parseInt(timeParts[0]);
         minute = parseInt(timeParts[1]);
-      
-        if (hour >= 12) { // 12 ~ 23시
+
+        if (hour >= 12) {
+          // 12 ~ 23시
           ampm = "PM";
           if (hour > 12) hour -= 12;
         }
@@ -194,11 +195,11 @@ const loadSelectedDateInfo = (selectedDate) => {
           if (hour === 0) hour += 12;
         }
       }
-      
+
       document.getElementById("ampm").value = ampm;
       document.getElementById("hour").value = hour;
       document.getElementById("minute").value = minute;
-      
+
       // 현재 날짜에 지정된 배경색 가져오기
       const selectedColor = selectedDayInfo.background || "";
       const colorButtons = document.querySelectorAll(".circleBtn");
@@ -261,7 +262,7 @@ const loadSelectedDateInfo = (selectedDate) => {
         selectedDayInfo.type || "";
       document.getElementById("detailTextarea").value =
         selectedDayInfo.content || "";
-      
+
       const startTime = selectedDayInfo.startTime || "";
       let hour = 0;
       let minute = 0;
@@ -271,8 +272,9 @@ const loadSelectedDateInfo = (selectedDate) => {
         const timeParts = startTime.split(":");
         hour = parseInt(timeParts[0]);
         minute = parseInt(timeParts[1]);
-      
-        if (hour >= 12) { // 12 ~ 23시
+
+        if (hour >= 12) {
+          // 12 ~ 23시
           ampm = "PM";
           if (hour > 12) hour -= 12;
         }
@@ -282,7 +284,7 @@ const loadSelectedDateInfo = (selectedDate) => {
           if (hour === 0) hour += 12;
         }
       }
-      
+
       document.getElementById("ampm").value = ampm;
       document.getElementById("hour").value = hour;
       document.getElementById("minute").value = minute;
@@ -678,11 +680,11 @@ const attachEvent = () => {
   // 시간에 대한 max, min 값 조정
   const hourInput = document.getElementById("hour");
   const minuteInput = document.getElementById("minute");
-  
+
   hourInput.addEventListener("change", () => {
     const value = parseInt(hourInput.value);
     if (value > parseInt(hourInput.max)) {
-      hourInput.value = hourInput.max; 
+      hourInput.value = hourInput.max;
     } else if (value < parseInt(hourInput.min)) {
       hourInput.value = hourInput.min;
     }
@@ -737,7 +739,7 @@ const attachEvent = () => {
     } else if (ampm === "AM" && hour === 12) {
       adjustedHour = hour - 12;
     } else adjustedHour = hour;
-    
+
     const hourString = adjustedHour.toString().padStart(2, "0");
     const minuteString = minute.toString().padStart(2, "0");
 
