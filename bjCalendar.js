@@ -300,7 +300,8 @@ const loadSelectedDateInfo = (selectedDate) => {
       document.getElementById("hour").value = hour;
       document.getElementById("minute").value = minute;
 
-      const showTime = ((ampm === "PM") ? "오후 " : "오전 ") + hour + "시 " + minute + "분";
+      const showTime =
+        (ampm === "PM" ? "오후 " : "오전 ") + hour + "시 " + minute + "분";
       document.getElementById("showTime").style.display = "block";
       document.getElementById("showTime").innerText = showTime;
     } else {

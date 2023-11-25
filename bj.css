@@ -228,14 +228,14 @@ body {
 }
 
 .subTitle {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
-.selectedDate {
+#selectedDate {
   background: #fff;
   color: #000;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 input[type="text"] {
@@ -313,10 +313,11 @@ textarea:focus {
   border-radius: 6px;
 }
 
-#noTime {
+#noTime,
+#showTime {
   background: #fff;
   color: #000;
-  font-size: 15px;
+  font-size: 13px;
   border-radius: 0;
   padding: 0;
   border: initial;
@@ -327,48 +328,7 @@ textarea:focus {
 #categoryInput:disabled {
   background: #fff;
   color: #000;
-  font-size: 15px;
-  padding: 0;
-  border: initial;
-  outline: initial;
-  padding-left: initial;
-}
-
-#ampm:disabled {
-  background: #fff;
-  color: #000;
-  font-size: 15px;
-  padding: 0;
-  border: initial;
-  outline: initial;
-  padding-left: initial;
-}
-
-#ampmOption:disabled {
-  background: #fff;
-  color: #000;
-  font-size: 15px;
-  padding: 0;
-  border: initial;
-  outline: initial;
-  padding-left: initial;
-}
-
-#hour:disabled {
-  background: #fff;
-  color: #000;
-  font-size: 15px;
-  padding: 0;
-  border: initial;
-  outline: initial;
-  padding-left: initial;
-  text-align: right;
-}
-
-#minute:disabled {
-  background: #fff;
-  color: #000;
-  font-size: 15px;
+  font-size: 13px;
   padding: 0;
   border: initial;
   outline: initial;
@@ -378,7 +338,7 @@ textarea:focus {
 textarea:disabled {
   background: #fff;
   color: #000;
-  font-size: 15px;
+  font-size: 13px;
   border-radius: 0;
   padding: 0;
   border: initial;
