@@ -115,6 +115,7 @@ const makeHeader = () => {
       year -= 1;
       month = 12;
     } else month -= 1;
+
     updateCalendar();
   };
 
@@ -132,7 +133,7 @@ const makeHeader = () => {
     } else month += 1;
     updateCalendar();
   };
-
+  console.log(year, month);
   header.appendChild(leftIcon);
   header.appendChild(yearText);
   header.appendChild(rightIcon);
@@ -152,7 +153,8 @@ const setDuration = (e) => {
 // 이때 bjName과 selectedBj가 다를 경우와 같을 경우 상세 페이지 정보를 다르게 보여줌
 const loadSelectedDateInfo = (selectedDate) => {
   let tmp_day = String(selectedDate).padStart(2, "0");
-  const currentDate = year + "-" + month + "-" + tmp_day;
+  let tmp_month = String(month).padStart(2, "0");
+  const currentDate = year + "-" + tmp_month + "-" + tmp_day;
 
   if (isBJ && selectedBj === bjName) {
     // 본인일 경우
@@ -355,15 +357,17 @@ const makeDate = () => {
     today.setAttribute("class", "today");
 
     let type = getDurationType(i);
+    let tmp_month = String(month).padStart(2, "0");
     let tmp_day = String(i).padStart(2, "0");
+
     if (
       plan[selectedBj] !== undefined &&
       plan[selectedBj] !== null &&
-      plan[selectedBj][year + "-" + month + "-" + tmp_day] !== undefined &&
-      plan[selectedBj][year + "-" + month + "-" + tmp_day] !== null
+      plan[selectedBj][year + "-" + tmp_month + "-" + tmp_day] !== undefined &&
+      plan[selectedBj][year + "-" + tmp_month + "-" + tmp_day] !== null
     ) {
       circle.style.background =
-        plan[selectedBj][year + "-" + month + "-" + tmp_day]["background"];
+        plan[selectedBj][year + "-" + tmp_month + "-" + tmp_day]["background"];
       if (
         circle.style.background === "" ||
         circle.style.background === "#ffffff"
@@ -374,7 +378,7 @@ const makeDate = () => {
         circle.style.border = "1px solid #000000";
       }
       today.innerText =
-        plan[selectedBj][year + "-" + month + "-" + tmp_day].type;
+        plan[selectedBj][year + "-" + tmp_month + "-" + tmp_day].type;
       p.appendChild(circle);
     } else {
       if (type === 0) {
