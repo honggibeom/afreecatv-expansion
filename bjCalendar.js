@@ -133,7 +133,6 @@ const makeHeader = () => {
     } else month += 1;
     updateCalendar();
   };
-  console.log(year, month);
   header.appendChild(leftIcon);
   header.appendChild(yearText);
   header.appendChild(rightIcon);
