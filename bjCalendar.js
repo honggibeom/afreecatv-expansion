@@ -444,13 +444,8 @@ const loadPlan = () => {
     bjNicknameObj = plandata.bjNicknameObj;
   }
 
-  if (
-    isBJ &&
-    bjName !== null &&
-    (plan[bjName] === undefined || plan[bjName] === null)
-  )
+  if (bjName !== null && (plan[bjName] === undefined || plan[bjName] === null))
     plan[bjName] = {};
-
   bjImgObj[bjName] = bjImg;
   bjNicknameObj[bjName] = bjNickname;
   calendarList.innerHTML = "";
